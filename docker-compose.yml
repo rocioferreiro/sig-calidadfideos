@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  db:
+    container_name: sig-db
+    image: postgres
+    restart: always
+    env_file:
+      - backend/.env
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: sig-db
+
+
