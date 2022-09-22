@@ -1,4 +1,4 @@
-export const baseurl = process.env.NODE_ENV === 'production' ? "/api/" : 'http://localhost:3001/';
+export const baseurl = 'https://pastaqualityapi.herokuapp.com/';
 
 const request = (url, method, body, config) => {
 
