@@ -23,88 +23,85 @@ pool.connect((err, client, release) => {
 })
 
 pool.on('connect', client => {
-  // client.query(`CREATE TABLE IF NOT EXISTS "Users"
-  //                 (
-  //                     "userID"    SERIAL,
-  //                     "name"      varchar(255) NOT NULL,
-  //                     "email"     varchar(255) NOT NULL,
-  //                     "coins"     float  DEFAULT 0.00,
-  //                     "mints"     text[] DEFAULT '{}',
-  //                     "purchases" text[] DEFAULT '{}',
-  //                     PRIMARY KEY ("userID")
-  //                 );`, (err) => {
-  //   if (!err) {
-  //     client.query('SELECT * from "Users"', (error, results) => {
-  //       if (results.rows.length < 4) {
-  //         console.log('Users created')
-  //         const sql = 'INSERT INTO "Users" ("name","email","coins","mints") VALUES %L';
-  //         const values = [["John Doe", "jd@gmail.com", 1234, '{1:2,3:1}'], ["Marc Sam", "ms@gmail.com", 92, '{}'], ["Alice John", "aj@gmail.com", 200, '{}'], ["Peter Parker", "pp@gmail.com", 29, '{}'], ["Sam Doe", "sd@gmail.com", 1000000, '{}']];
-  //         client.query(format(sql, values), [], (error, results) => {
-  //           if (!error) {
-  //             console.log("Users test data inserted")
-  //             console.log(results.rows)
-  //           } else {
-  //             console.log("users")
-  //             console.log(error.message)
-  //           }
-  //         })
-  //       }
-  //     })
-  //   }
-  // });
-  //
-  // client.query(`CREATE TABLE IF NOT EXISTS "Drop"
-  //                 (
-  //                     "dropID"      SERIAL,
-  //                     "rarity"      varchar(255) NOT NULL,
-  //                     "asset"       text         NOT NULL,
-  //                     "name"        varchar(255) NOT NULL,
-  //                     "series"      varchar(255),
-  //                     "description" text,
-  //                     "price"       float        NOT NULL,
-  //                     "mints"       integer[] DEFAULT '{}',
-  //                     "dropDate"    timestamp    NOT NULL,
-  //                     PRIMARY KEY ("dropID")
-  //                 );`, (err) => {
-  //   if (!err) {
-  //     client.query('SELECT * from "Drop"', (error, results) => {
-  //       if (results.rows.length < 4) {
-  //         console.log('Drop created')
-  //         const sql = 'INSERT INTO "Drop" (rarity, asset, name, series, description, price, mints, "dropDate") VALUES %L';
-  //         const values = [['Common', 'robot (1).gif', 'Robot 1', 'Robots', 'Robot #1 Description', 50, '{1, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-03-02", "11:00:00"'], ['Uncommon', 'robot (2).gif', 'Robot 2', 'Robots', 'Robot #2 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-03-04", "11:00:00"'], ['Common', 'robot (3).gif', 'Robot 3', 'Robots', 'Robot #3 Description', 50, '{2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-03-20", "12:00:00"'], ['Rare', 'robot (4).gif', 'Robot 4', 'Robots', 'Robot #4 Description', 70, '{1, 2, 3, 4, 5}', '"2022-03-21", "15:00:00"'], ['Uncommon', 'robot (5).gif', 'Robot 5', 'Robots', 'Robot #5 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-04-02", "11:00:00"'], ['Common', 'robot (6).gif', 'Robot 6', 'Robots', 'Robot #6 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-03", "11:00:00"'], ['Uncommon', 'robot (7).gif', 'Robot 7', 'Robots', 'Robot #7 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-04-04", "11:00:00"'], ['Epic', 'robot (8).gif', 'Robot 8', 'Robots', 'Robot #8 Description', 100, '{1, 2, 3}', '"2022-04-05", "11:00:00"'], ['Common', 'robot (9).gif', 'Robot 9', 'Robots', 'Robot #9 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-06", "11:00:00"'], ['Common', 'robot (10).gif', 'Robot 10', 'Robots', 'Robot #10 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-07", "11:00:00"'], ['Rare', 'robot (11).gif', 'Robot 11', 'Robots', 'Robot #11 Description', 70, '{1, 2, 3, 4, 5}', '"2022-04-08", "11:00:00"'], ['Common', 'robot (12).gif', 'Robot 12', 'Robots', 'Robot #12 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-09", "11:00:00"'], ['Uncommon', 'robot (13).gif', 'Robot 13', 'Robots', 'Robot #13 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-04-10", "11:00:00"'], ['Legendary', 'robot (14).gif', 'Robot 14', 'Robots', 'Robot #14 Description', 500, '{1}', '"2022-04-15", "11:00:00"']];
-  //         client.query(format(sql, values), [], (error, results) => {
-  //           if (!error) {
-  //             console.log("Drop test data inserted")
-  //             console.log(results.rows)
-  //           } else {
-  //             console.log("drops")
-  //             console.log(error.message)
-  //           }
-  //         })
-  //       }
-  //     })
-  //   }
-  // });
-  //
-  // client.query(`CREATE TABLE IF NOT EXISTS "Listings"
-  //                 (
-  //                     "listingID" SERIAL,
-  //                     "userID"    integer   NOT NULL,
-  //                     "mint"      text      NOT NULL,
-  //                     "price"     float     NOT NULL,
-  //                     "date"      timestamp NOT NULL,
-  //                     "sold"      boolean DEFAULT false,
-  //                     "soldTo"    integer DEFAULT NULL,
-  //                     PRIMARY KEY ("listingID")
-  //                 );`, (err) => {
-  //   if (!err) {
-  //     client.query('SELECT * from "Listings"', (error, results) => {
-  //       if (results.rows.length < 4) {
-  //         console.log('Listings created')
-  //       }
-  //     })
-  //   }
-  // });
+  client.query(`CREATE TABLE IF NOT EXISTS "Users"
+                  (
+                      "userID"    SERIAL,
+                      "name"      varchar(255) NOT NULL,
+                      "email"     varchar(255) NOT NULL,
+                      "password"  varchar(255) NOT NULL,
+                      PRIMARY KEY ("userID")
+                  );`, (err) => {
+    if (!err) {
+      client.query('SELECT * from "Users"', (error, results) => {
+        if (results.rows.length < 4) {
+          console.log('Users created')
+          const sql = 'INSERT INTO "Users" ("name","email","password") VALUES %L';
+          const values = [["John Doe", "jd@gmail.com", 'pass123'], ["Marc Sam", "ms@gmail.com", 'pass123'], ["Alice John", "aj@gmail.com", 'pass123'], ["Peter Parker", "pp@gmail.com", 'pass123'], ["Sam Doe", "sd@gmail.com", 'pass123']];
+          client.query(format(sql, values), [], (error, results) => {
+            if (!error) {
+              console.log("Users test data inserted")
+              console.log(results.rows)
+            } else {
+              console.log("users")
+              console.log(error.message)
+            }
+          })
+        }
+      })
+    }
+  });
+  
+  client.query(`CREATE TABLE IF NOT EXISTS "Batch"
+                  (
+                      "batchID"        SERIAL,
+                      "sku"            varchar(255) NOT NULL,
+                      "description"    text         NOT NULL,
+                      "batchNumber"    float        NOT NULL,
+                      "shatterLevel"   float       DEFAULT 0,
+                      "state"          integer      NOT NULL,
+                      "samples"        integer[] DEFAULT '{}',
+                      "productionDate" timestamp    NOT NULL,
+                      PRIMARY KEY ("batchID")
+                  );`, (err) => {
+    if (!err) {
+      client.query('SELECT * from "Batch"', (error, results) => {
+        if (results.rows.length < 4) {
+          console.log('Batch created')
+          const sql = 'INSERT INTO "Batch" (sku, description, batchNumber, shatterLevel, state, samples, "productionDate") VALUES %L';
+          const values = [['123qweasd456', 'Batch 1 of march', 23, 0.6, 'Robot #1 Description', 50, '{1, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-03-02", "11:00:00"'], ['Uncommon', 'robot (2).gif', 'Robot 2', 'Robots', 'Robot #2 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-03-04", "11:00:00"'], ['Common', 'robot (3).gif', 'Robot 3', 'Robots', 'Robot #3 Description', 50, '{2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-03-20", "12:00:00"'], ['Rare', 'robot (4).gif', 'Robot 4', 'Robots', 'Robot #4 Description', 70, '{1, 2, 3, 4, 5}', '"2022-03-21", "15:00:00"'], ['Uncommon', 'robot (5).gif', 'Robot 5', 'Robots', 'Robot #5 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-04-02", "11:00:00"'], ['Common', 'robot (6).gif', 'Robot 6', 'Robots', 'Robot #6 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-03", "11:00:00"'], ['Uncommon', 'robot (7).gif', 'Robot 7', 'Robots', 'Robot #7 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-04-04", "11:00:00"'], ['Epic', 'robot (8).gif', 'Robot 8', 'Robots', 'Robot #8 Description', 100, '{1, 2, 3}', '"2022-04-05", "11:00:00"'], ['Common', 'robot (9).gif', 'Robot 9', 'Robots', 'Robot #9 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-06", "11:00:00"'], ['Common', 'robot (10).gif', 'Robot 10', 'Robots', 'Robot #10 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-07", "11:00:00"'], ['Rare', 'robot (11).gif', 'Robot 11', 'Robots', 'Robot #11 Description', 70, '{1, 2, 3, 4, 5}', '"2022-04-08", "11:00:00"'], ['Common', 'robot (12).gif', 'Robot 12', 'Robots', 'Robot #12 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-09", "11:00:00"'], ['Uncommon', 'robot (13).gif', 'Robot 13', 'Robots', 'Robot #13 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-04-10", "11:00:00"'], ['Legendary', 'robot (14).gif', 'Robot 14', 'Robots', 'Robot #14 Description', 500, '{1}', '"2022-04-15", "11:00:00"']];
+          client.query(format(sql, values), [], (error, results) => {
+            if (!error) {
+              console.log("Drop test data inserted")
+              console.log(results.rows)
+            } else {
+              console.log("drops")
+              console.log(error.message)
+            }
+          })
+        }
+      })
+    }
+  });
+  
+  client.query(`CREATE TABLE IF NOT EXISTS "Listings"
+                  (
+                      "listingID" SERIAL,
+                      "userID"    integer   NOT NULL,
+                      "mint"      text      NOT NULL,
+                      "price"     float     NOT NULL,
+                      "date"      timestamp NOT NULL,
+                      "sold"      boolean DEFAULT false,
+                      "soldTo"    integer DEFAULT NULL,
+                      PRIMARY KEY ("listingID")
+                  );`, (err) => {
+    if (!err) {
+      client.query('SELECT * from "Listings"', (error, results) => {
+        if (results.rows.length < 4) {
+          console.log('Listings created')
+        }
+      })
+    }
+  });
 })
 
 const getUsers = (request, response) => {
