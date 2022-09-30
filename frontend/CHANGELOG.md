@@ -80,7 +80,7 @@ _Warnings might appear while doing an npm install - they do not affect the UI or
 ## [1.8.0] 2019-08-26
 ### Bug fixing
 - Rewrote the ISSUE_TEMPLATE
-- Deleted the copyright comments from all files, we only need to keep them inside our index.js and index.html
+- Deleted the copyright comments from all files, we only need to keep them inside our index.ts and index.html
 - Added script that adds copyrights to the built app
 - Renamed all the files from `.jsx` to `.js`
 - Changed the `withStyles` function from Material-UI with the `makeStyles` function (integration with other frameworks should now be easy)
@@ -156,7 +156,7 @@ ajv                        6.9.1   →   6.10.0
 - Almost all styles have been changed due to new components, solved issues or [the prettier command](https://prettier.io/docs/en/install.html)
 ### Major components changes
 - Changes caused by running [the prettier command](https://prettier.io/docs/en/install.html) for *.jsx*, *.js*, *.html* and *.css* files
-- **src/index.js**
+- **src/index.ts**
 - **src/components/CustomTabs/CustomTabs.jsx**
 - **src/components/Header/Header.jsx**
 - **src/components/Sidebar/Sidebar.jsx**
@@ -279,7 +279,7 @@ ajv                        6.9.1   →   6.10.0
 ## [1.3.0] 2018-06-15
 ### Bug Fixing
 - Changed import from `material-ui` to `@material-ui/core`
-- Droped `src/components/index.js`, and changed all the imports to separate ones
+- Droped `src/components/index.ts`, and changed all the imports to separate ones
 - Renamed `ItemGrid` to `GridItem`
 ### Major style changes
 - Moved the styles of `src/components/` inside `src/assets/jss/material-dashboard-react/components/`
@@ -327,7 +327,7 @@ ajv                        6.9.1   →   6.10.0
 
 ## [1.2.0] 2018-04-16
 ### Bug Fixing
-- Renamed `src/containers/App/App.jsx` to `src/layouts/Dashboard/Dashboard.jsx`
+- Renamed `src/containers/App/App.tsx` to `src/layouts/Dashboard/Dashboard.jsx`
 - Renamed `src/variables/styles.jsx` to `src/assets/jss/material-dashboard-react.jsx`
 - Moved all the files from `src/variables/styles/` to `src/assets/jss/material-dashboard-react/`
 - Changes caused by the upgrade of `material-ui`

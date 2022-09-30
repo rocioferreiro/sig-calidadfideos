@@ -98,9 +98,9 @@ material-dashboard-react
 │   ├── index.html
 │   └── manifest.json
 └── src
-    ├── index.js
+    ├── index.ts
     ├── logo.svg
-    ├── routes.js
+    ├── routes.ts
     ├── assets
     │   ├── css
     │   │   └── material-dashboard-react.css
