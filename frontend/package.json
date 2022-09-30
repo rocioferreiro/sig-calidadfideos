@@ -1,7 +1,6 @@
 {
-  "name": "material-dashboard-react",
+  "name": "Pasta Quality Assuarance",
   "version": "1.10.0",
-  "description": "Material Dashboard React. Coded by Creative Tim",
   "private": false,
   "main": "dist/index.js",
   "dependencies": {
@@ -17,7 +16,8 @@
     "react-dom": "^16.14.0",
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.3",
-    "react-swipeable-views": "0.13.9"
+    "react-swipeable-views": "0.13.9",
+    "@babel/core": "7.14.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -32,17 +32,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/material-dashboard-react.git"
+    "url": "git+https://github.com/rocioferreiro/sig-calidadfideos.git"
   },
   "keywords": [],
-  "author": "Creative Tim <hello@creative-tim.com> (https://www.creative-tim.com/)",
+  "author": "Rocio Ferreiro",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/creativetimofficial/material-dashboard-react/issues"
-  },
-  "homepage": "https://creativetimofficial.github.io/material-dashboard-react/#/dashboard",
+  "homepage": "./",
   "optionalDependencies": {
-    "@babel/core": "7.14.0",
     "typescript": "4.2.4"
   },
   "devDependencies": {
