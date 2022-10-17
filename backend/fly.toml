@@ -1,15 +1,20 @@
-# fly.toml file generated for sig-api on 2022-09-30T13:16:05-03:00
+# fly.toml file generated for sig-api on 2022-10-17T00:45:47-03:00
 
 app = "sig-api"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
+[build]
+  builder = "heroku/buildpacks:20"
+
 [env]
-  PGDATABASE = "sig-db"
-  PGHOST = "sig-db.internal"
-  PGPASSWORD = "1b6b5ce783ed0b8f3329ef476bd832bf09a4bccf9e567271"
-  PGPORT = 5432
+  NODE_ENV = "production"
+  DATABASE_URL= "postgres://postgres:9fcc9d6e0a1f89a2dc1191c407b80e8118677d7c5e2ed353@sig-api-db.internal:5432/sig_api"
+  PGDATABASE = "sig_api"
+  PGHOST = "sig-api-db.internal"
+  PGPASSWORD = "9fcc9d6e0a1f89a2dc1191c407b80e8118677d7c5e2ed353"
+  PGPORT = "5432"
   PGUSER = "postgres"
   PORT = "8080"
 
