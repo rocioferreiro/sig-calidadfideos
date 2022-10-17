@@ -50,7 +50,7 @@ pool.on('connect', client => {
       })
     }
   });
-  
+
   client.query(`CREATE TABLE IF NOT EXISTS "Batch"
                   (
                       "batchID"        SERIAL,
@@ -64,44 +64,44 @@ pool.on('connect', client => {
                       PRIMARY KEY ("batchID")
                   );`, (err) => {
     if (!err) {
-      client.query('SELECT * from "Batch"', (error, results) => {
-        if (results.rows.length < 4) {
-          console.log('Batch created')
-          const sql = 'INSERT INTO "Batch" (sku, description, batchNumber, shatterLevel, state, samples, "productionDate") VALUES %L';
-          const values = [['123qweasd456', 'Batch 1 of march', 23, 0.6, 'Robot #1 Description', 50, '{1, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-03-02", "11:00:00"'], ['Uncommon', 'robot (2).gif', 'Robot 2', 'Robots', 'Robot #2 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-03-04", "11:00:00"'], ['Common', 'robot (3).gif', 'Robot 3', 'Robots', 'Robot #3 Description', 50, '{2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-03-20", "12:00:00"'], ['Rare', 'robot (4).gif', 'Robot 4', 'Robots', 'Robot #4 Description', 70, '{1, 2, 3, 4, 5}', '"2022-03-21", "15:00:00"'], ['Uncommon', 'robot (5).gif', 'Robot 5', 'Robots', 'Robot #5 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-04-02", "11:00:00"'], ['Common', 'robot (6).gif', 'Robot 6', 'Robots', 'Robot #6 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-03", "11:00:00"'], ['Uncommon', 'robot (7).gif', 'Robot 7', 'Robots', 'Robot #7 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-04-04", "11:00:00"'], ['Epic', 'robot (8).gif', 'Robot 8', 'Robots', 'Robot #8 Description', 100, '{1, 2, 3}', '"2022-04-05", "11:00:00"'], ['Common', 'robot (9).gif', 'Robot 9', 'Robots', 'Robot #9 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-06", "11:00:00"'], ['Common', 'robot (10).gif', 'Robot 10', 'Robots', 'Robot #10 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-07", "11:00:00"'], ['Rare', 'robot (11).gif', 'Robot 11', 'Robots', 'Robot #11 Description', 70, '{1, 2, 3, 4, 5}', '"2022-04-08", "11:00:00"'], ['Common', 'robot (12).gif', 'Robot 12', 'Robots', 'Robot #12 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-09", "11:00:00"'], ['Uncommon', 'robot (13).gif', 'Robot 13', 'Robots', 'Robot #13 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-04-10", "11:00:00"'], ['Legendary', 'robot (14).gif', 'Robot 14', 'Robots', 'Robot #14 Description', 500, '{1}', '"2022-04-15", "11:00:00"']];
-          client.query(format(sql, values), [], (error, results) => {
-            if (!error) {
-              console.log("Drop test data inserted")
-              console.log(results.rows)
-            } else {
-              console.log("drops")
-              console.log(error.message)
-            }
-          })
-        }
-      })
+      // client.query('SELECT * from "Batch"', (error, results) => {
+      //   if (results.rows.length < 4) {
+      //     console.log('Batch created')
+      //     const sql = 'INSERT INTO "Batch" (sku, description, batchNumber, shatterLevel, state, samples, "productionDate") VALUES %L';
+      //     const values = [['123qweasd456', 'Batch 1 of march', 23, 0.6, 'Robot #1 Description', 50, '{1, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-03-02", "11:00:00"'], ['Uncommon', 'robot (2).gif', 'Robot 2', 'Robots', 'Robot #2 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-03-04", "11:00:00"'], ['Common', 'robot (3).gif', 'Robot 3', 'Robots', 'Robot #3 Description', 50, '{2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-03-20", "12:00:00"'], ['Rare', 'robot (4).gif', 'Robot 4', 'Robots', 'Robot #4 Description', 70, '{1, 2, 3, 4, 5}', '"2022-03-21", "15:00:00"'], ['Uncommon', 'robot (5).gif', 'Robot 5', 'Robots', 'Robot #5 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-04-02", "11:00:00"'], ['Common', 'robot (6).gif', 'Robot 6', 'Robots', 'Robot #6 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-03", "11:00:00"'], ['Uncommon', 'robot (7).gif', 'Robot 7', 'Robots', 'Robot #7 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-04-04", "11:00:00"'], ['Epic', 'robot (8).gif', 'Robot 8', 'Robots', 'Robot #8 Description', 100, '{1, 2, 3}', '"2022-04-05", "11:00:00"'], ['Common', 'robot (9).gif', 'Robot 9', 'Robots', 'Robot #9 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-06", "11:00:00"'], ['Common', 'robot (10).gif', 'Robot 10', 'Robots', 'Robot #10 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-07", "11:00:00"'], ['Rare', 'robot (11).gif', 'Robot 11', 'Robots', 'Robot #11 Description', 70, '{1, 2, 3, 4, 5}', '"2022-04-08", "11:00:00"'], ['Common', 'robot (12).gif', 'Robot 12', 'Robots', 'Robot #12 Description', 50, '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}', '"2022-04-09", "11:00:00"'], ['Uncommon', 'robot (13).gif', 'Robot 13', 'Robots', 'Robot #13 Description', 50, '{1, 2, 3, 4, 5, 6, 7}', '"2022-04-10", "11:00:00"'], ['Legendary', 'robot (14).gif', 'Robot 14', 'Robots', 'Robot #14 Description', 500, '{1}', '"2022-04-15", "11:00:00"']];
+      //     client.query(format(sql, values), [], (error, results) => {
+      //       if (!error) {
+      //         console.log("Drop test data inserted")
+      //         console.log(results.rows)
+      //       } else {
+      //         console.log("drops")
+      //         console.log(error.message)
+      //       }
+      //     })
+      //   }
+      // })
     }
   });
-  
-  client.query(`CREATE TABLE IF NOT EXISTS "Listings"
-                  (
-                      "listingID" SERIAL,
-                      "userID"    integer   NOT NULL,
-                      "mint"      text      NOT NULL,
-                      "price"     float     NOT NULL,
-                      "date"      timestamp NOT NULL,
-                      "sold"      boolean DEFAULT false,
-                      "soldTo"    integer DEFAULT NULL,
-                      PRIMARY KEY ("listingID")
-                  );`, (err) => {
-    if (!err) {
-      client.query('SELECT * from "Listings"', (error, results) => {
-        if (results.rows.length < 4) {
-          console.log('Listings created')
-        }
-      })
-    }
-  });
+
+  // client.query(`CREATE TABLE IF NOT EXISTS "Listings"
+  //                 (
+  //                     "listingID" SERIAL,
+  //                     "userID"    integer   NOT NULL,
+  //                     "mint"      text      NOT NULL,
+  //                     "price"     float     NOT NULL,
+  //                     "date"      timestamp NOT NULL,
+  //                     "sold"      boolean DEFAULT false,
+  //                     "soldTo"    integer DEFAULT NULL,
+  //                     PRIMARY KEY ("listingID")
+  //                 );`, (err) => {
+  //   if (!err) {
+  //     client.query('SELECT * from "Listings"', (error, results) => {
+  //       if (results.rows.length < 4) {
+  //         console.log('Listings created')
+  //       }
+  //     })
+  //   }
+  // });
 })
 
 const getUsers = (request, response) => {
@@ -134,6 +134,23 @@ const getUserByEmail = (request, response) => {
     }
     if (results.rows.length < 1) {
       return response.status(404).json("NOT A USER WITH THAT EMAIL")
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const login = (request, response) => {
+  const {password, email} = request.body
+  if (email.length < 1) return response.status(400).json('NOT VALID EMAIL')
+  pool.query('SELECT * FROM "Users" WHERE "email" = $1', [email], (error, results) => {
+    if (error) {
+      return response.status(400).json(error)
+    }
+    if (results.rows.length < 1) {
+      return response.status(404).json("NOT A USER WITH THAT EMAIL")
+    }
+    if (results.rows[0].password !== password) {
+      return response.status(404).json("BAD CREDENTIALS")
     }
     response.status(200).json(results.rows)
   })

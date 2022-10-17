@@ -1,0 +1,14 @@
+{
+  "development": {
+    "url": "postgres://root:password@localhost:5432/sig-db",
+    "dialect": "postgres"
+  },
+  "test": {
+    "url": "postgres://postgres:1b6b5ce783ed0b8f3329ef476bd832bf09a4bccf9e567271@sig-db.internal:5432/sig-db",
+    "dialect": "postgres"
+  },
+  "production": {
+    "url": "postgres://postgres:1b6b5ce783ed0b8f3329ef476bd832bf09a4bccf9e567271@sig-db.internal:5432/sig-db",
+    "dialect": "postgres"
+  }
+}

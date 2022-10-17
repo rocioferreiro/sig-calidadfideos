@@ -1,0 +1,44 @@
+# fly.toml file generated for sig-api on 2022-09-30T13:16:05-03:00
+
+app = "sig-api"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[env]
+  PGDATABASE = "sig-db"
+  PGHOST = "sig-db.internal"
+  PGPASSWORD = "1b6b5ce783ed0b8f3329ef476bd832bf09a4bccf9e567271"
+  PGPORT = 5432
+  PGUSER = "postgres"
+  PORT = "8080"
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[[services]]
+  http_checks = []
+  internal_port = 8080
+  processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
