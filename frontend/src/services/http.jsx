@@ -1,4 +1,4 @@
-export const baseurl = 'https://pastaqualityapi.herokuapp.com/';
+export const baseurl = 'https://sig-api.fly.dev/api/';
 
 const request = (url, method, body, config) => {
 
