@@ -49,7 +49,6 @@ export default function SignIn() {
   const [cred, setCred] = React.useState({email: '', password: ''})
 
   const submit = () => {
-    debugger;
     post('login', cred).then(() => {
         history.push('/admin')
       }

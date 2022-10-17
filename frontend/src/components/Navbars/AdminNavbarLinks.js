@@ -20,12 +20,14 @@ import CustomInput from "../../components/CustomInput/CustomInput.js";
 import Button from "../../components/CustomButtons/Button.js";
 
 import styles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles(styles);
 
 export default function AdminNavbarLinks() {
   const classes = useStyles();
   const [openNotification, setOpenNotification] = React.useState(null);
+  const history = useHistory();
   const [openProfile, setOpenProfile] = React.useState(null);
   const handleClickNotification = (event) => {
     if (openNotification && openNotification.contains(event.target)) {
@@ -46,6 +48,9 @@ export default function AdminNavbarLinks() {
   };
   const handleCloseProfile = () => {
     setOpenProfile(null);
+  };
+  const logout = () => {
+    history.push('/login');
   };
   return (
     <div>
@@ -207,7 +212,7 @@ export default function AdminNavbarLinks() {
                     </MenuItem>
                     <Divider light />
                     <MenuItem
-                      onClick={handleCloseProfile}
+                      onClick={logout}
                       className={classes.dropdownItem}
                     >
                       Logout
