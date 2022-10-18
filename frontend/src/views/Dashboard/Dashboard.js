@@ -41,31 +41,34 @@ import {
 import styles from "../../assets/jss/material-dashboard-react/views/dashboardStyle.js";
 import {InfoRounded} from "@material-ui/icons";
 import Success from "../../components/Typography/Success";
+import Button from "@material-ui/core/Button";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   const classes = useStyles();
+  const history = useHistory();
   return (
     <div>
       <GridContainer>
         <GridItem xs={12} sm={6} md={3}>
           <Card>
-            <CardHeader color="danger" stats icon>
-              <CardIcon color="danger">
-                <Icon>task_alt</Icon>
+            <CardHeader color="success" stats icon>
+              <CardIcon color="success">
+                <NotInterested />
               </CardIcon>
-              <p className={classes.cardCategory}>Eficacia de lotes analizados</p>
+              <p className={classes.cardCategory}>Porcentaje de Lotes rechazados</p>
               <h3 className={classes.cardTitle}>
-                49 <small>%</small>
+                6 <small>%</small>
               </h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <Danger>
-                  <WarningIcon />
-                  Debe aumentar
-                </Danger>
+                <Success>
+                  <CheckCircle />
+                  Valor mejor al esperado
+                </Success>
               </div>
             </CardFooter>
           </Card>
@@ -114,23 +117,7 @@ export default function Dashboard() {
         </GridItem>
         <GridItem xs={12} sm={6} md={3}>
           <Card>
-            <CardHeader color="success" stats icon>
-              <CardIcon color="success">
-                <NotInterested />
-              </CardIcon>
-              <p className={classes.cardCategory}>Porcentaje de Lotes rechazados</p>
-              <h3 className={classes.cardTitle}>
-                6 <small>%</small>
-              </h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Success>
-                  <CheckCircle />
-                  Valor mejor al esperado
-                </Success>
-              </div>
-            </CardFooter>
+            <Button onClick={() => history.push('/batch/new')}> Agregar nuevo lote </Button>
           </Card>
         </GridItem>
       </GridContainer>
