@@ -11,15 +11,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import { post } from "../../services/http";
 import { useHistory } from "react-router-dom";
 
+import bgImage from "../../assets/img/sidebar-2.jpg";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: `url(${bgImage})`,
+    filter: 'brightness(0.3)',
     backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    backgroundColor: theme.palette.grey[900],
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },
@@ -49,7 +51,11 @@ export default function SignIn() {
   const [cred, setCred] = React.useState({email: '', password: ''})
 
   const submit = () => {
-    post('login', cred).then(() => {
+    post('login', cred).then(res => {
+        console.log(res);
+        localStorage.setItem('name', res.user.name);
+        localStorage.setItem('mail', res.user.email);
+        localStorage.setItem('date', res.user.updatedAt);
         history.push('/admin')
       }
     )

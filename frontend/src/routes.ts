@@ -11,6 +11,10 @@ import Language from "@material-ui/icons/Language";
 import DashboardPage from "./views/Dashboard/Dashboard";
 import UserProfile from "./views/UserProfile/UserProfile";
 import TableList from "./views/TableList/TableList";
+import InProgressTable from "./views/Tables/InProgressTable";
+import HistoryTable from "./views/Tables/HistoryTable";
+import ConcessionTable from "./views/Tables/ConcessionTable";
+import RegectedTable from "./views/Tables/RegectedTable";
 
 const dashboardRoutes = [
   {
@@ -22,11 +26,31 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/table",
-    name: "Table List",
-    rtlName: "قائمة الجدول",
+    path: "/inprogress",
+    name: "Lotes en Proceso",
     icon: "content_paste",
-    component: TableList,
+    component: InProgressTable,
+    layout: "/admin",
+  },
+  {
+    path: "/history",
+    name: "Historial",
+    icon: "content_paste",
+    component: HistoryTable,
+    layout: "/admin",
+  },
+  {
+    path: "/concession",
+    name: "Bajo Concesión",
+    icon: "content_paste",
+    component: ConcessionTable,
+    layout: "/admin",
+  },
+  {
+    path: "/regected",
+    name: "No Conformes",
+    icon: "content_paste",
+    component: RegectedTable,
     layout: "/admin",
   },
   {
