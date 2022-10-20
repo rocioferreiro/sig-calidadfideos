@@ -64,9 +64,41 @@ export default function Details({id}) {
     })
   }, [])
 
-  // function getSampleState() {
-  //   if(batch.changes.filter(c => ))
-  // }
+  function getDateXDaysAgo(numOfDays, date = new Date()) {
+    const daysAgo = new Date(date.getTime());
+    daysAgo.setDate(date.getDate() - numOfDays);
+    return daysAgo;
+  }
+
+  function getDifferenceBetweenDates(date1, date2){
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
+    if(diffDays < 1) return {amount: diffHours, unit: 'horas'};
+    else return {amount: diffDays, unit: 'dias'};
+  }
+
+  function getSampleState() {
+    const state = batch.changes.filter(s => s.type === 'coccion').length > 0? 'coccion' : batch.changes.filter(s => s.type === 'visual').length > 0? 'visual': 'cargado';
+    switch (state) {
+      case 'cargado':
+        if(getDateXDaysAgo(2).getTime() > new Date(batch.batch.productionDate)){
+          return 'Listo para control visual';
+        } else {
+          const diff = getDifferenceBetweenDates(getDateXDaysAgo(2), new Date(batch.batch.productionDate))
+          return `${diff.amount} ${diff.unit} hasta control visual`;
+        }
+      case 'visual':
+        if(getDateXDaysAgo(7).getTime() > new Date(batch.batch.productionDate)){
+          return 'Listo para cocción';
+        } else {
+          const diff = getDifferenceBetweenDates(getDateXDaysAgo(7), new Date(batch.batch.productionDate))
+          return `${diff.amount} ${diff.unit} faltantes para cocción`;
+        }
+      case 'coccion':
+        return `Listo, trizado: ${batch.batch.shatterLevel}`;
+    }
+  }
 
   return batch ? (
     <GridContainer>
@@ -99,7 +131,7 @@ export default function Details({id}) {
           <CardBody>
             <Container style={{backgroundColor: 'warning', display: 'flex', justifyContent: 'space-between', padding: 0}}>
               <h4> Muestra </h4>
-              <div style={styles.stateStyle}> 5 horas para proximo control </div>
+              <div style={styles.stateStyle}> {getSampleState()} </div>
             </Container>
           </CardBody>
         </Card>
@@ -115,12 +147,9 @@ export default function Details({id}) {
           <CardBody>
             <Table
               tableHeaderColor="warning"
-              tableHead={["Responsable", "Cambio", "Estado anterior", "Estado actual"]}
-              tableData={[
-                ["Jane Doe", "Control Cocción", "7% de trizado", "8% de trizado"],
-                ["Peter Parker", "Control Visual", "Espera", "7% de trizado"],
-                ["Minerva Hooper", "Nueva muestra", "", "Espera"],
-              ]}
+              tableHead={["Responsable", "Cambio", "Fecha"]}
+              tableData={batch.changes.map(c => [c.user.name, c.type === 'visual'? 'Control Visual': c.type === 'coccion' ? "Control Cocción" : "Nueva muestra", new Date(c.date).toUTCString().substring(0,16)])
+              }
             />
           </CardBody>
         </Card>

@@ -46,6 +46,7 @@ type Batch = {
   batchNumber: number,
   product: {type: string, brand: string},
   productionDate: string,
+  shatterLevel: number,
   samples: {state: string, packingDate: string}[]
 }
 
@@ -54,34 +55,79 @@ const useStyles = makeStyles(styles);
 
 export default function InProgressTable() {
   const classes = useStyles();
-  const [batches, setBatches] = React.useState<Batch[]>([]);
+  const [batches, setBatches] = React.useState<{ batches: Batch[], changes: any[][] }>();
+  const [tableData, setTableData] = React.useState<string[][]>();
 
   React.useEffect(() => {
     get('batches/state/PROCESANDO').then(res => {
-      setBatches(res.batches)
+      setBatches(res);
+      debugger;
+      setTableData(res.batches.map((b: Batch, key: number) =>
+        [`${b.batchNumber}`,
+          `${b.product.type} ${b.product.brand}`,
+          b.productionDate,
+          getSampleState({batch: b, changes: res.changes[key]}).visual,
+          getSampleState({batch: b, changes: res.changes[key]}).coccion
+        ]));
     })
   }, [])
 
-  function getState(batch: Batch){
+  function getDateXDaysAgo(numOfDays: number, date = new Date()) {
+    const daysAgo = new Date(date.getTime());
+    daysAgo.setDate(date.getDate() - numOfDays);
+    return daysAgo;
+  }
 
+  function getDifferenceBetweenDates(date1: Date, date2: Date){
+    const diffTime = Math.abs(date2.getTime() - date1.getTime());
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
+    if(diffDays < 1) return {amount: diffHours, unit: 'hora/s'};
+    else return {amount: Math.ceil(diffDays), unit: 'dia/s'};
+  }
+
+  function getSampleState(batch: { batch: Batch, changes: any[] }) {
+    const state = batch.changes.filter(s => s.type === 'coccion').length > 0? 'coccion' : batch.changes.filter(s => s.type === 'visual').length > 0? 'visual': 'cargado';
+    switch (state) {
+      case 'cargado':
+        if(getDateXDaysAgo(2).getTime() > new Date(batch.batch.productionDate).getTime()){
+          return {visual: 'Listo para control', coccion: 'Falta control visual para desbloquear'};
+        } else {
+          const diff = getDifferenceBetweenDates(getDateXDaysAgo(2), new Date(batch.batch.productionDate))
+          return {visual: `${diff.amount} ${diff.unit} faltante/s`, coccion: 'Falta control visual para desbloquear'}
+        }
+        break;
+      case 'visual':
+        if(getDateXDaysAgo(7).getTime() > new Date(batch.batch.productionDate).getTime()){
+          return {visual: `Listo, trizado: ${batch.batch.shatterLevel}`, coccion: 'Listo para control'};
+        } else {
+          const diff = getDifferenceBetweenDates(getDateXDaysAgo(7), new Date(batch.batch.productionDate))
+          return {visual: `Listo, trizado: ${batch.batch.shatterLevel}`, coccion: `${diff.amount} ${diff.unit} faltante/s`}
+        }
+        break;
+      case 'coccion':
+        return {visual: `Listo`, coccion: `Listo, trizado: ${batch.batch.shatterLevel}`};
+    }
   }
 
   return (
     <GridContainer>
         <Card>
           <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Simple Table</h4>
+            <h4 className={classes.cardTitleWhite}>Lotes en Proceso</h4>
             <p className={classes.cardCategoryWhite}>
-              Here is a subtitle for this table
+              En esta tabla se encuentran los lotes que todavia estan en proceso de control de calidad.
             </p>
           </CardHeader>
           <CardBody>
-            <Table
-              tableHeaderColor="primary"
-              tableHead={["Nro de Lote", "Producto", "Produccion", "Estado de Control Visual", "Estado de Cocción"]}
-              tableData={batches.map(b => [`${b.batchNumber}`, `${b.product.type} ${b.product.brand}`, b.productionDate, "Listo para Control", "Listo para Control" ])}
-              ids={batches.map(b => b.id)}
-            />
+            {tableData && batches &&
+              <Table
+                tableHeaderColor="primary"
+                tableHead={["Nro de Lote", "Producto", "Produccion", "Estado de Control Visual", "Estado de Cocción"]}
+                tableData={tableData}
+                ids={batches.batches.map(b => b.id)}
+              />
+            }
           </CardBody>
         </Card>
     </GridContainer>
