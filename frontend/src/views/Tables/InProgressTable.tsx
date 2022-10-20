@@ -8,6 +8,7 @@ import Table from "../../components/Table/Table.js";
 import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
+import {useHistory} from "react-router-dom";
 
 const styles = {
   cardCategoryWhite: {
@@ -44,6 +45,7 @@ const useStyles = makeStyles(styles);
 
 export default function InProgressTable() {
   const classes = useStyles();
+
   return (
     <GridContainer>
         <Card>
@@ -56,14 +58,14 @@ export default function InProgressTable() {
           <CardBody>
             <Table
               tableHeaderColor="primary"
-              tableHead={["Name", "Country", "City", "Salary"]}
+              tableHead={["Nro de Lote", "Producto", "Produccion", "Estado de Muestra"]}
               tableData={[
-                ["Dakota Rice", "Niger", "Oud-Turnhout", "$36,738"],
-                ["Minerva Hooper", "Curaçao", "Sinaai-Waas", "$23,789"],
-                ["Sage Rodriguez", "Netherlands", "Baileux", "$56,142"],
-                ["Philip Chaney", "Korea, South", "Overland Park", "$38,735"],
-                ["Doris Greene", "Malawi", "Feldkirchen in Kärnten", "$63,542"],
-                ["Mason Porter", "Chile", "Gloucester", "$78,615"],
+                ["1", "Tirabuzon Marolio", "10/10/2022", "Listo para Control"],
+                ["2", "Coditos Marolio", "10/10/2022", "2hs hasta control"],
+                ["3", "Tirabuzon Marolio", "10/10/2022", "3 dias hasta control"],
+                ["4", "Coditos Marolio", "10/10/2022", "Listo para Control"],
+                ["5", "Tirabuzon Lucchetti", "10/10/2022", "4hs hasta control"],
+                ["6", "Tirabuzon Marolio", "10/10/2022", "8 dias hasta control"],
               ]}
             />
           </CardBody>
