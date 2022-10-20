@@ -15,8 +15,9 @@ const useStyles = makeStyles(styles);
 
 export default function CustomTable(props) {
   const classes = useStyles();
-  const { tableHead, tableData, tableHeaderColor } = props;
+  const { tableHead, tableData, tableHeaderColor, ids } = props;
   const history = useHistory();
+
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
@@ -39,7 +40,7 @@ export default function CustomTable(props) {
         <TableBody>
           {tableData.map((prop, key) => {
             return (
-              <TableRow key={key} className={classes.tableBodyRow} onClick={()=>history.push(`/batch/${key}`)}>
+              <TableRow key={key} className={classes.tableBodyRow} onClick={()=>history.push(`/batch/${ids[key]}`)}>
                 {prop.map((prop, key) => {
                   return (
                     <TableCell className={classes.tableCell} key={key}>
@@ -72,4 +73,5 @@ CustomTable.propTypes = {
   ]),
   tableHead: PropTypes.arrayOf(PropTypes.string),
   tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+  ids: PropTypes.arrayOf(PropTypes.number)
 };

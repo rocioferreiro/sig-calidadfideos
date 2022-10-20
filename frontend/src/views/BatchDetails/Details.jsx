@@ -10,6 +10,7 @@ import CardBody from "../../components/Card/CardBody.js";
 import GridItem from "../../components/Grid/GridItem";
 import {Container} from "@material-ui/core";
 import {Timer} from "@material-ui/icons";
+import {get} from "../../services/http";
 
 const styles = {
   cardCategoryWhite: {
@@ -53,22 +54,34 @@ const styles = {
 // @ts-ignore
 const useStyles = makeStyles(styles);
 
-export default function Details() {
+export default function Details({id}) {
+  const [batch, setBatch] = React.useState();
   const classes = useStyles();
-  return (
+
+  React.useEffect(() => {
+    get(`batches/${id}`).then(res => {
+      setBatch(res)
+    })
+  }, [])
+
+  // function getSampleState() {
+  //   if(batch.changes.filter(c => ))
+  // }
+
+  return batch ? (
     <GridContainer>
       <GridItem xs={12} sm={6} md={6}>
         <Card>
           <CardHeader color="warning">
-            <h4 className={classes.cardTitleWhite}>Lote n° 45</h4>
+            <h4 className={classes.cardTitleWhite}>Lote n° {batch.batch.batchNumber}</h4>
           </CardHeader>
           <CardBody style={{display: 'flex', justifyContent: 'space-between'}}>
             <div>
-              <h4> Moñitos Marolio </h4>
-              <p> SKU: 2367152417492379 </p>
+              <h4> {batch.batch.product.type} {batch.batch.product.brand} </h4>
+              <p> SKU: {batch.batch.sku} </p>
               <p> Producido: 2022/10/17 </p>
             </div>
-            <h6> Trizado actual: <strong>{' '} 8% </strong></h6>
+            <h6> Trizado actual: <strong>{' '} {batch.batch.shatterLevel}% </strong></h6>
           </CardBody>
         </Card>
       </GridItem>
@@ -78,14 +91,14 @@ export default function Details() {
           <CardBody>
             <Container style={{backgroundColor: 'warning', display: 'flex', justifyContent: 'center'}}>
               <Timer/>
-              <div style={{paddingLeft: 20}}> PROCESANDO </div>
+              <div style={{paddingLeft: 20}}> {batch.batch.state} </div>
             </Container>
           </CardBody>
         </Card>
         <Card>
           <CardBody>
             <Container style={{backgroundColor: 'warning', display: 'flex', justifyContent: 'space-between', padding: 0}}>
-              <h4> Muestra n°1 </h4>
+              <h4> Muestra </h4>
               <div style={styles.stateStyle}> 5 horas para proximo control </div>
             </Container>
           </CardBody>
@@ -113,5 +126,5 @@ export default function Details() {
         </Card>
       </GridItem>
     </GridContainer>
-  );
+  ) : <></>
 }

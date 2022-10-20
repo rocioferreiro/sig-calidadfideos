@@ -8,7 +8,6 @@ import Table from "../../components/Table/Table.js";
 import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
-import {useHistory} from "react-router-dom";
 import {get} from "../../services/http";
 
 const styles = {
@@ -81,7 +80,7 @@ export default function InProgressTable() {
               tableHeaderColor="primary"
               tableHead={["Nro de Lote", "Producto", "Produccion", "Estado de Control Visual", "Estado de Cocción"]}
               tableData={batches.map(b => [`${b.batchNumber}`, `${b.product.type} ${b.product.brand}`, b.productionDate, "Listo para Control", "Listo para Control" ])}
-
+              ids={batches.map(b => b.id)}
             />
           </CardBody>
         </Card>

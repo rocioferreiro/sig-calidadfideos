@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, Redirect, HashRouter } from "react-router-dom";
 
 // core components
 import Admin from "./layouts/Admin";
@@ -11,7 +11,7 @@ import "./assets/css/material-dashboard-react.css?v=1.10.0";
 import NewBatch from "./views/NewBatch";
 
 ReactDOM.render(
-  <BrowserRouter>
+  <HashRouter>
     <Switch>
       <Route path="/admin" component={Admin} />
       <Route path="/batch/new" component={NewBatch} />
@@ -20,6 +20,6 @@ ReactDOM.render(
       <Redirect from="/" to={localStorage.getItem('mail') ? "/admin" : "/login"} />
       <Redirect from={'/*'} to={localStorage.getItem('mail') ? "/admin" : "/login"} />
     </Switch>
-  </BrowserRouter>,
+  </HashRouter>,
   document.getElementById("root")
 );
