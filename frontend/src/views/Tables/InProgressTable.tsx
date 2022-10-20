@@ -9,6 +9,7 @@ import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
 import {useHistory} from "react-router-dom";
+import {get} from "../../services/http";
 
 const styles = {
   cardCategoryWhite: {
@@ -45,6 +46,13 @@ const useStyles = makeStyles(styles);
 
 export default function InProgressTable() {
   const classes = useStyles();
+  const [batches, setBatches] = React.useState();
+
+  React.useEffect(() => {
+    get('batches/state/PROCESANDO').then(res => {
+      console.log(res)
+    })
+  }, [])
 
   return (
     <GridContainer>
