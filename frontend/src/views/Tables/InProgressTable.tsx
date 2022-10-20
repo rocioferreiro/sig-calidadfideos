@@ -41,18 +41,31 @@ const styles = {
   },
 };
 
+type Batch = {
+  id: number,
+  sku: number,
+  batchNumber: number,
+  product: {type: string, brand: string},
+  productionDate: string,
+  samples: {state: string, packingDate: string}[]
+}
+
 // @ts-ignore
 const useStyles = makeStyles(styles);
 
 export default function InProgressTable() {
   const classes = useStyles();
-  const [batches, setBatches] = React.useState();
+  const [batches, setBatches] = React.useState<Batch[]>([]);
 
   React.useEffect(() => {
     get('batches/state/PROCESANDO').then(res => {
-      console.log(res)
+      setBatches(res.batches)
     })
   }, [])
+
+  function getState(batch: Batch){
+
+  }
 
   return (
     <GridContainer>
@@ -66,15 +79,9 @@ export default function InProgressTable() {
           <CardBody>
             <Table
               tableHeaderColor="primary"
-              tableHead={["Nro de Lote", "Producto", "Produccion", "Estado de Muestra"]}
-              tableData={[
-                ["1", "Tirabuzon Marolio", "10/10/2022", "Listo para Control"],
-                ["2", "Coditos Marolio", "10/10/2022", "2hs hasta control"],
-                ["3", "Tirabuzon Marolio", "10/10/2022", "3 dias hasta control"],
-                ["4", "Coditos Marolio", "10/10/2022", "Listo para Control"],
-                ["5", "Tirabuzon Lucchetti", "10/10/2022", "4hs hasta control"],
-                ["6", "Tirabuzon Marolio", "10/10/2022", "8 dias hasta control"],
-              ]}
+              tableHead={["Nro de Lote", "Producto", "Produccion", "Estado de Control Visual", "Estado de Cocción"]}
+              tableData={batches.map(b => [`${b.batchNumber}`, `${b.product.type} ${b.product.brand}`, b.productionDate, "Listo para Control", "Listo para Control" ])}
+
             />
           </CardBody>
         </Card>
