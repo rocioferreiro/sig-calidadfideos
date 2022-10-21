@@ -55,6 +55,7 @@ export default function SignIn() {
         console.log(res);
         localStorage.setItem('name', res.user.name);
         localStorage.setItem('mail', res.user.email);
+        localStorage.setItem('id', res.user.id);
         localStorage.setItem('date', res.user.updatedAt);
         history.push('/admin')
       }

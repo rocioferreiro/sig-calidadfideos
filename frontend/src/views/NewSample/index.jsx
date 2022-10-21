@@ -13,7 +13,7 @@ import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
 import {useFormik} from "formik";
 import {get, post} from "../../services/http";
-import {useHistory} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 
 const styles = {
   cardCategoryWhite: {
@@ -50,112 +50,45 @@ const useStyles = makeStyles(styles);
 
 export default function NewSample(){
   const classes = useStyles();
-  const [products, setProducts] = React.useState([]);
+  const params = useParams();
   const history = useHistory();
   const formik = useFormik({
     initialValues: {
-      sku: '',
-      productId: '',
-      batchNumber: '',
-      productionDate: new Date(),
+      packingDate: new Date()
     },
     onSubmit: values => {
-      post('batches', {
-        sku: Number(values.sku),
-        productId: Number(values.productId),
-        batchNumber: Number(values.batchNumber),
-        productionDate: values.productionDate,
-        state: 'PROCESANDO',
-        shatterLevel: 0
+      post(`samples/${params.id}/${localStorage.getItem('id')}`, {
+        packingDate: values.packingDate,
+        state: 'cargado'
       }, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*"
         }
       }).then(() => {
-        history.push('/admin/inprogress')
+        history.push(`/batch/${params.id}`)
       }).catch(e => {
         alert(e);
       })
     },
   });
 
-  React.useEffect(() => {
-    get('products').then(res => {
-      setProducts(res.prods)
-    })
-  }, [])
-
   return <Layout>
     <Card>
       <CardHeader color="primary">
-        <h4 className={classes.cardTitleWhite}>Nuevo Lote</h4>
-        <p className={classes.cardCategoryWhite}>Complete los datos del lote</p>
+        <h4 className={classes.cardTitleWhite}>Nueva Muestra</h4>
+        <p className={classes.cardCategoryWhite}>Complete fecha de envasado del paquete</p>
       </CardHeader>
       <CardBody>
         <GridContainer>
-          <GridItem xs={12} sm={12} md={6}>
-            <CustomInput
-              labelText="SKU"
-              id="sku"
-              formControlProps={{
-                fullWidth: true,
-              }}
-              inputProps={{
-                value: formik.values.sku,
-                onChange: formik.handleChange
-              }}
-            />
-          </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
-            <CustomInput
-              labelText="Nro de Lote"
-              id="batchNumber"
-              formControlProps={{
-                fullWidth: true,
-              }}
-              inputProps={{
-                value: formik.values.batchNumber,
-                onChange: formik.handleChange
-              }}
-            />
-          </GridItem>
-        </GridContainer>
-        <GridContainer>
-          <GridItem xs={12} sm={12} md={6}>
-            <FormControl
-              className={classes.formControl}
-              fullWidth={true}
-            >
-              <InputLabel htmlFor="product">Producto</InputLabel>
-              <Select
-                value={formik.values.product}
-                onChange={formik.handleChange}
-                inputProps={{
-                  name: 'productId',
-                  id: 'productId',
-                }}
-              >
-                <MenuItem value="">
-                  <em>Vaciar</em>
-                </MenuItem>
-                {products.map(p => {
-                  return <MenuItem value={p.id}>{p.type} {p.brand}</MenuItem>
-                })}
-
-                {/*<MenuItem value={2}>Coditos Marolio</MenuItem>*/}
-                {/*<MenuItem value={3}>Tirabuzon Lucchetti</MenuItem>*/}
-              </Select>
-            </FormControl>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
+          <GridItem xs={12} sm={12} md={12}>
             <FormControl
               className={classes.formControl}
               fullWidth={true}
             >
               <TextField
-                id="date"
-                label="Fecha de producción"
+                id="packingDate"
+                label="Fecha de envasado"
                 type="datetime-local"
                 value={formik.values.date}
                 onChange={formik.handleChange}

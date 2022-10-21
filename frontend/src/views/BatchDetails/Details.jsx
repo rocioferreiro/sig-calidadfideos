@@ -61,6 +61,7 @@ export default function Details({id}) {
   const history = useHistory();
 
   React.useEffect(() => {
+    debugger
     get(`batches/${id}`).then(res => {
       setBatch(res)
     })
@@ -81,12 +82,12 @@ export default function Details({id}) {
   }
 
   function getSampleState() {
-    if(batch.changes[0] === 0) return {text: 'Agregar muestra', action: () => {history.push('sample/add')}}
+    if(batch.changes[0] === 0) return {text: 'Agregar muestra', action: () => {history.push(`/batch/${batch.batch.id}/add`)}}
     const state = batch.changes.filter(s => s.type === 'coccion').length > 0? 'coccion' : batch.changes.filter(s => s.type === 'visual').length > 0? 'visual': 'cargado';
     switch (state) {
       case 'cargado':
         if(getDateXDaysAgo(2).getTime() > new Date(batch.batch.productionDate)){
-          return {text: 'Listo para control visual', action: () => {history.push(`sample/edit/${batch.batch.samples[0].id}`)}};
+          return {text: 'Listo para control visual', action: () => {history.push(`/batch/${batch.batch.id}/edit/${batch.batch.samples[0].id}`)}};
         } else {
           const diff = getDifferenceBetweenDates(getDateXDaysAgo(2), new Date(batch.batch.productionDate))
           return {text:`${diff.amount} ${diff.unit} hasta control visual`, action: () => {}};
@@ -95,7 +96,7 @@ export default function Details({id}) {
         if(getDateXDaysAgo(7).getTime() > new Date(batch.batch.productionDate)){
           return {text: 'Listo para coccion', action: () => {
             debugger
-            history.push(`sample/edit/${batch.batch.samples.filter(s => s.state === 'visual')[0].id}`)
+            history.push(`/batch/${batch.batch.id}/edit/${batch.batch.samples.filter(s => s.state === 'visual')[0].id}`)
           }};
         } else {
           const diff = getDifferenceBetweenDates(getDateXDaysAgo(7), new Date(batch.batch.productionDate))

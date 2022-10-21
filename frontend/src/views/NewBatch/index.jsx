@@ -154,7 +154,7 @@ export default function NewBatch(){
               fullWidth={true}
             >
               <TextField
-                id="date"
+                id="productionDate"
                 label="Fecha de producción"
                 type="datetime-local"
                 value={formik.values.date}
