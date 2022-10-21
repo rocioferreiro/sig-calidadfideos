@@ -65,7 +65,7 @@ export default function InProgressTable() {
       setTableData(res.batches.map((b: Batch, key: number) =>
         [`${b.batchNumber}`,
           `${b.product.type} ${b.product.brand}`,
-          b.productionDate,
+          new Date(b.productionDate).toUTCString().substring(0,16),
           getSampleState({batch: b, changes: res.changes[key]}).visual,
           getSampleState({batch: b, changes: res.changes[key]}).coccion
         ]));
@@ -96,7 +96,6 @@ export default function InProgressTable() {
           const diff = getDifferenceBetweenDates(getDateXDaysAgo(2), new Date(batch.batch.productionDate))
           return {visual: `${diff.amount} ${diff.unit} faltante/s`, coccion: 'Falta control visual para desbloquear'}
         }
-        break;
       case 'visual':
         if(getDateXDaysAgo(7).getTime() > new Date(batch.batch.productionDate).getTime()){
           return {visual: `Listo, trizado: ${batch.batch.shatterLevel}`, coccion: 'Listo para control'};
@@ -104,7 +103,6 @@ export default function InProgressTable() {
           const diff = getDifferenceBetweenDates(getDateXDaysAgo(7), new Date(batch.batch.productionDate))
           return {visual: `Listo, trizado: ${batch.batch.shatterLevel}`, coccion: `${diff.amount} ${diff.unit} faltante/s`}
         }
-        break;
       case 'coccion':
         return {visual: `Listo`, coccion: `Listo, trizado: ${batch.batch.shatterLevel}`};
     }

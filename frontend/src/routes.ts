@@ -14,7 +14,7 @@ import TableList from "./views/TableList/TableList";
 import InProgressTable from "./views/Tables/InProgressTable";
 import HistoryTable from "./views/Tables/HistoryTable";
 import ConcessionTable from "./views/Tables/ConcessionTable";
-import RegectedTable from "./views/Tables/RegectedTable";
+import RejectedTable from "./views/Tables/RejectedTable";
 
 const dashboardRoutes = [
   {
@@ -50,7 +50,7 @@ const dashboardRoutes = [
     path: "/regected",
     name: "No Conformes",
     icon: "content_paste",
-    component: RegectedTable,
+    component: RejectedTable,
     layout: "/admin",
   },
   {

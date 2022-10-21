@@ -11,6 +11,7 @@ import GridItem from "../../components/Grid/GridItem";
 import {Container} from "@material-ui/core";
 import {Timer} from "@material-ui/icons";
 import {get} from "../../services/http";
+import {useHistory} from "react-router-dom";
 
 const styles = {
   cardCategoryWhite: {
@@ -57,6 +58,7 @@ const useStyles = makeStyles(styles);
 export default function Details({id}) {
   const [batch, setBatch] = React.useState();
   const classes = useStyles();
+  const history = useHistory();
 
   React.useEffect(() => {
     get(`batches/${id}`).then(res => {
@@ -79,24 +81,28 @@ export default function Details({id}) {
   }
 
   function getSampleState() {
+    if(batch.changes[0] === 0) return {text: 'Agregar muestra', action: () => {history.push('sample/add')}}
     const state = batch.changes.filter(s => s.type === 'coccion').length > 0? 'coccion' : batch.changes.filter(s => s.type === 'visual').length > 0? 'visual': 'cargado';
     switch (state) {
       case 'cargado':
         if(getDateXDaysAgo(2).getTime() > new Date(batch.batch.productionDate)){
-          return 'Listo para control visual';
+          return {text: 'Listo para control visual', action: () => {history.push(`sample/edit/${batch.batch.samples[0].id}`)}};
         } else {
           const diff = getDifferenceBetweenDates(getDateXDaysAgo(2), new Date(batch.batch.productionDate))
-          return `${diff.amount} ${diff.unit} hasta control visual`;
+          return {text:`${diff.amount} ${diff.unit} hasta control visual`, action: () => {}};
         }
       case 'visual':
         if(getDateXDaysAgo(7).getTime() > new Date(batch.batch.productionDate)){
-          return 'Listo para cocción';
+          return {text: 'Listo para coccion', action: () => {
+            debugger
+            history.push(`sample/edit/${batch.batch.samples.filter(s => s.state === 'visual')[0].id}`)
+          }};
         } else {
           const diff = getDifferenceBetweenDates(getDateXDaysAgo(7), new Date(batch.batch.productionDate))
-          return `${diff.amount} ${diff.unit} faltantes para cocción`;
+          return {text:`${diff.amount} ${diff.unit} faltantes para cocción`, action: () => {}};
         }
       case 'coccion':
-        return `Listo, trizado: ${batch.batch.shatterLevel}`;
+        return {text:`Listo, trizado: ${batch.batch.shatterLevel}`, action: () => {}};
     }
   }
 
@@ -131,7 +137,7 @@ export default function Details({id}) {
           <CardBody>
             <Container style={{backgroundColor: 'warning', display: 'flex', justifyContent: 'space-between', padding: 0}}>
               <h4> Muestra </h4>
-              <div style={styles.stateStyle}> {getSampleState()} </div>
+              <div style={styles.stateStyle} onClick={getSampleState().action}> {getSampleState().text} </div>
             </Container>
           </CardBody>
         </Card>
@@ -145,12 +151,15 @@ export default function Details({id}) {
             </p>
           </CardHeader>
           <CardBody>
+            {batch.changes[0] !== 0 ?
             <Table
               tableHeaderColor="warning"
               tableHead={["Responsable", "Cambio", "Fecha"]}
               tableData={batch.changes.map(c => [c.user.name, c.type === 'visual'? 'Control Visual': c.type === 'coccion' ? "Control Cocción" : "Nueva muestra", new Date(c.date).toUTCString().substring(0,16)])
               }
-            />
+            /> :
+              <p> No se realizó ningun cambio todavía! </p>
+            }
           </CardBody>
         </Card>
       </GridItem>

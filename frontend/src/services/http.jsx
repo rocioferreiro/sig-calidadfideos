@@ -6,7 +6,9 @@ const request = (url, method, body, config) => {
         "Content-Type": "application/json", "Access-Control-Allow-Origin": "*"
     };
     const configuration = {
-        method: method, body: body ? JSON.stringify(body) : undefined, headers: headers,
+      method: method,
+      body: body ? JSON.stringify(body) : undefined,
+      headers: headers
     };
     return fetch(baseurl + url, configuration)
 

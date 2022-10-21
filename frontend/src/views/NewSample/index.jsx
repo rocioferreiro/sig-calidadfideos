@@ -48,7 +48,7 @@ const styles = {
 // @ts-ignore
 const useStyles = makeStyles(styles);
 
-export default function NewBatch(){
+export default function NewSample(){
   const classes = useStyles();
   const [products, setProducts] = React.useState([]);
   const history = useHistory();
@@ -140,7 +140,7 @@ export default function NewBatch(){
                   <em>Vaciar</em>
                 </MenuItem>
                 {products.map(p => {
-                    return <MenuItem value={p.id}>{p.type} {p.brand}</MenuItem>
+                  return <MenuItem value={p.id}>{p.type} {p.brand}</MenuItem>
                 })}
 
                 {/*<MenuItem value={2}>Coditos Marolio</MenuItem>*/}
