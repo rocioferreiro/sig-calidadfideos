@@ -10,6 +10,7 @@ import BatchDetails from "./views/BatchDetails";
 import "./assets/css/material-dashboard-react.css?v=1.10.0";
 import NewBatch from "./views/NewBatch";
 import NewSample from "./views/NewSample";
+import VisualControl from "./views/VisualControl";
 
 ReactDOM.render(
   <HashRouter>
@@ -17,6 +18,7 @@ ReactDOM.render(
       <Route path="/admin" component={Admin} />
       <Route path="/batch/new" component={NewBatch} />
       <Route path="/batch/:id/add" component={NewSample} />
+      <Route path="/visual/:batchId/:sampleId" component={VisualControl} />
       <Route path="/batch/:id" component={BatchDetails} />
       <Route path={"/login"} component={SignIn}/>
       <Redirect from="/" to={localStorage.getItem('mail') ? "/admin" : "/login"} />

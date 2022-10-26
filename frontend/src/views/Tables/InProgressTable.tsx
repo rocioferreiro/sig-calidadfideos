@@ -61,7 +61,6 @@ export default function InProgressTable() {
   React.useEffect(() => {
     get('batches/state/PROCESANDO').then(res => {
       setBatches(res);
-      debugger;
       setTableData(res.batches.map((b: Batch, key: number) =>
         [`${b.batchNumber}`,
           `${b.product.type} ${b.product.brand}`,
@@ -98,10 +97,10 @@ export default function InProgressTable() {
         }
       case 'visual':
         if(getDateXDaysAgo(7).getTime() > new Date(batch.batch.productionDate).getTime()){
-          return {visual: `Listo, trizado: ${batch.batch.shatterLevel}`, coccion: 'Listo para control'};
+          return {visual: `Listo, ${batch.batch.shatterLevel > 0? 'LEVE TRIZADO' : 'OK'}`, coccion: 'Listo para control'};
         } else {
           const diff = getDifferenceBetweenDates(getDateXDaysAgo(7), new Date(batch.batch.productionDate))
-          return {visual: `Listo, trizado: ${batch.batch.shatterLevel}`, coccion: `${diff.amount} ${diff.unit} faltante/s`}
+          return {visual: `Listo, ${batch.batch.shatterLevel > 0? 'LEVE TRIZADO' : 'OK'}`, coccion: `${diff.amount} ${diff.unit} faltante/s`}
         }
       case 'coccion':
         return {visual: `Listo`, coccion: `Listo, trizado: ${batch.batch.shatterLevel}`};

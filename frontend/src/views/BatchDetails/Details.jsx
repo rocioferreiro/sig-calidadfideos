@@ -87,7 +87,7 @@ export default function Details({id}) {
     switch (state) {
       case 'cargado':
         if(getDateXDaysAgo(2).getTime() > new Date(batch.batch.productionDate)){
-          return {text: 'Listo para control visual', action: () => {history.push(`/batch/${batch.batch.id}/edit/${batch.batch.samples[0].id}`)}};
+          return {text: 'Listo para control visual', action: () => {history.push(`/visual/${batch.batch.id}/${batch.batch.samples[0].id}`)}};
         } else {
           const diff = getDifferenceBetweenDates(getDateXDaysAgo(2), new Date(batch.batch.productionDate))
           return {text:`${diff.amount} ${diff.unit} hasta control visual`, action: () => {}};
@@ -120,7 +120,10 @@ export default function Details({id}) {
               <p> SKU: {batch.batch.sku} </p>
               <p> Producido: 2022/10/17 </p>
             </div>
-            <h6> Trizado actual: <strong>{' '} {batch.batch.shatterLevel}% </strong></h6>
+            {batch.batch.state === 'PROCESANDO'?
+              <h6> {batch.batch.shatterLevel > 0 ? 'Trizado: Leve Trizado' : 'Trizado: OK'}</h6> :
+              <h6> Trizado actual: <strong>{' '} {batch.batch.shatterLevel}% </strong></h6>
+            }
           </CardBody>
         </Card>
       </GridItem>
