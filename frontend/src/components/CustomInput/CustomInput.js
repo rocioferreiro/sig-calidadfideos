@@ -41,10 +41,11 @@ export default function CustomInput(props) {
     [classes.marginTop]: labelText === undefined,
   });
   let newInputProps = {
-    maxLength:
-      inputProps && inputProps.maxLength ? inputProps.maxLength : undefined,
-    minLength:
-      inputProps && inputProps.minLength ? inputProps.minLength : undefined,
+    maxlength: inputProps && inputProps.maxLength ? inputProps.maxLength : undefined,
+    max: inputProps && inputProps.max ? inputProps.max : undefined,
+    minlength: inputProps && inputProps.minLength ? inputProps.minLength : undefined,
+    min: inputProps && inputProps.min ? inputProps.min : undefined,
+    type: inputProps && inputProps.type ? inputProps.type : undefined,
     step: inputProps && inputProps.step ? inputProps.step : undefined,
   };
   return (

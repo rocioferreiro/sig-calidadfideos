@@ -115,7 +115,7 @@ export default function VisualControl(){
         </GridContainer>
       </CardBody>
       <CardFooter>
-        <Button color="primary" onClick={formik.submitForm}> CREAR </Button>
+        <Button color="primary" onClick={formik.submitForm}> AGREGAR </Button>
       </CardFooter>
     </Card>
   </Layout>

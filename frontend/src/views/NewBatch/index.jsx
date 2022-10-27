@@ -60,23 +60,25 @@ export default function NewBatch(){
       productionDate: new Date(),
     },
     onSubmit: values => {
-      post('batches', {
-        sku: Number(values.sku),
-        productId: Number(values.productId),
-        batchNumber: Number(values.batchNumber),
-        productionDate: values.productionDate,
-        state: 'PROCESANDO',
-        shatterLevel: 0
-      }, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
-        }
-      }).then(() => {
-        history.push('/admin/inprogress')
-      }).catch(e => {
-        alert(e);
-      })
+      if(values.batchNumber.toString().length > 10 || values.batchNumber.toString().length < 10) alert('El numero de lote debe ser de 10 caracteres!')
+      else {
+        post('batches', {
+          productId: Number(values.productId),
+          batchNumber: Number(values.batchNumber),
+          productionDate: values.productionDate,
+          state: 'PROCESANDO',
+          shatterLevel: 0
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+          }
+        }).then(() => {
+          history.push('/admin/inprogress')
+        }).catch(e => {
+          alert(e);
+        })
+      }
     },
   });
 
@@ -94,40 +96,12 @@ export default function NewBatch(){
       </CardHeader>
       <CardBody>
         <GridContainer>
-          <GridItem xs={12} sm={12} md={6}>
-            <CustomInput
-              labelText="SKU"
-              id="sku"
-              formControlProps={{
-                fullWidth: true,
-              }}
-              inputProps={{
-                value: formik.values.sku,
-                onChange: formik.handleChange
-              }}
-            />
-          </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
-            <CustomInput
-              labelText="Nro de Lote"
-              id="batchNumber"
-              formControlProps={{
-                fullWidth: true,
-              }}
-              inputProps={{
-                value: formik.values.batchNumber,
-                onChange: formik.handleChange
-              }}
-            />
-          </GridItem>
-        </GridContainer>
-        <GridContainer>
-          <GridItem xs={12} sm={12} md={6}>
+          <GridItem xs={12} sm={12} md={12}>
             <FormControl
               className={classes.formControl}
               fullWidth={true}
             >
-              <InputLabel htmlFor="product">Producto</InputLabel>
+              <InputLabel htmlFor="product">SKU - Producto</InputLabel>
               <Select
                 value={formik.values.product}
                 onChange={formik.handleChange}
@@ -140,13 +114,32 @@ export default function NewBatch(){
                   <em>Vaciar</em>
                 </MenuItem>
                 {products.map(p => {
-                    return <MenuItem value={p.id}>{p.type} {p.brand}</MenuItem>
+                  return <MenuItem value={p.id}>{p.SKU} - {p.type} {p.brand}</MenuItem>
                 })}
 
                 {/*<MenuItem value={2}>Coditos Marolio</MenuItem>*/}
                 {/*<MenuItem value={3}>Tirabuzon Lucchetti</MenuItem>*/}
               </Select>
             </FormControl>
+          </GridItem>
+
+        </GridContainer>
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={6}>
+            <CustomInput
+              labelText="Nro de Lote"
+              id="batchNumber"
+              formControlProps={{
+                fullWidth: true,
+              }}
+              inputProps={{
+                value: formik.values.batchNumber,
+                onChange: formik.handleChange,
+                max: "9999999999",
+                min: "1000000000",
+                type: 'number'
+              }}
+            />
           </GridItem>
           <GridItem xs={12} sm={12} md={6}>
             <FormControl
@@ -169,7 +162,7 @@ export default function NewBatch(){
         </GridContainer>
       </CardBody>
       <CardFooter>
-        <Button color="primary" onClick={formik.submitForm}> CREAR </Button>
+        <Button color="primary" onClick={formik.submitForm} type={'submit'}> CREAR </Button>
       </CardFooter>
     </Card>
   </Layout>

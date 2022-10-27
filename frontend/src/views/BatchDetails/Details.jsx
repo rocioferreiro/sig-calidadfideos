@@ -117,7 +117,7 @@ export default function Details({id}) {
           <CardBody style={{display: 'flex', justifyContent: 'space-between'}}>
             <div>
               <h4> {batch.batch.product.type} {batch.batch.product.brand} </h4>
-              <p> SKU: {batch.batch.sku} </p>
+              <p> SKU: {batch.batch.product.SKU} </p>
               <p> Producido: 2022/10/17 </p>
             </div>
             {batch.batch.state === 'PROCESANDO'?
