@@ -9,7 +9,7 @@ import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
 import GridItem from "../../components/Grid/GridItem";
 import {Container} from "@material-ui/core";
-import {Timer} from "@material-ui/icons";
+import {Timer, Edit} from "@material-ui/icons";
 import {get} from "../../services/http";
 import {useHistory} from "react-router-dom";
 
@@ -83,7 +83,8 @@ export default function Details({id}) {
 
   function getSampleState() {
     if(batch.changes[0] === 0) return {text: 'Agregar muestra', action: () => {history.push(`/batch/${batch.batch.id}/add`)}}
-    const state = batch.changes.filter(s => s.type === 'coccion').length > 0? 'coccion' : batch.changes.filter(s => s.type === 'visual').length > 0? 'visual': 'cargado';
+    const state = batch.batch.samples[0].state;
+    debugger;
     switch (state) {
       case 'cargado':
         if(getDateXDaysAgo(2).getTime() > new Date(batch.batch.productionDate)){
@@ -140,7 +141,10 @@ export default function Details({id}) {
         <Card>
           <CardBody>
             <Container style={{backgroundColor: 'warning', display: 'flex', justifyContent: 'space-between', padding: 0}}>
-              <h4> Muestra </h4>
+              <div style={{display: 'flex'}}>
+                <h4> Muestra </h4>
+                <div style={{display: 'flex', alignItems: 'center', paddingLeft: 10}} onClick={() => {history.push(`/batch/${batch.batch.id}/add`)}}> <Edit/> </div>
+              </div>
               <div style={styles.stateStyle} onClick={getSampleState().action}> {getSampleState().text} </div>
             </Container>
           </CardBody>
