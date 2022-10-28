@@ -103,7 +103,7 @@ export default function Details({id}) {
           const diff = getDifferenceBetweenDates(getDateXDaysAgo(7), new Date(batch.batch.productionDate))
           return {text:`${diff.amount} ${diff.unit} faltantes para cocción`, action: () => {}};
         }
-      case 'coccion':
+      case 'coccion', 'trizado':
         return {text:`Listo, trizado: ${batch.batch.shatterLevel}`, action: () => {}};
     }
   }
@@ -142,8 +142,8 @@ export default function Details({id}) {
           <CardBody>
             <Container style={{backgroundColor: 'warning', display: 'flex', justifyContent: 'space-between', padding: 0}}>
               <div style={{display: 'flex'}}>
-                <h4> Muestra </h4>
-                <div style={{display: 'flex', alignItems: 'center', paddingLeft: 10}} onClick={() => {history.push(`/batch/${batch.batch.id}/add`)}}> <Edit/> </div>
+                <h4 >{getSampleState().text === 'Agregar muestra' ? 'No hay Muestra' : 'Muestra'}  </h4>
+                <div style={{display: (getSampleState().text === 'Agregar muestra' || batch.batch.samples[0].state === 'trizado') ? 'none': 'flex', alignItems: 'center', paddingLeft: 10}} onClick={() => {history.push(`/batch/${batch.batch.id}/add`)}}> <Edit/> </div>
               </div>
               <div style={styles.stateStyle} onClick={getSampleState().action}> {getSampleState().text} </div>
             </Container>
