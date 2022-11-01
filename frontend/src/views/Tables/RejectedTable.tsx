@@ -47,6 +47,7 @@ type Batch = {
   product: {type: string, brand: string},
   productionDate: string,
   shatterLevel: number,
+  state: string,
   samples: {state: string, packingDate: string}[]
 }
 
@@ -63,10 +64,13 @@ export default function InProgressTable() {
       setBatches(res);
       debugger;
       setTableData(res.batches.map((b: Batch, key: number) =>
-        [`${b.batchNumber}`,
+        [`${b.id}`,
+          `${b.batchNumber}`,
           `${b.product.type} ${b.product.brand}`,
-          new Date(b.productionDate).toUTCString().substring(0,16),
-          `${b.shatterLevel}%`
+          `${b.state}`,
+           b.productionDate,
+          `${b.shatterLevel}%`,
+          `${res.changes[key].filter((c: any) => c.type === 'coccion')[0].user.name}`
         ]));
     })
   }, [])
@@ -84,8 +88,11 @@ export default function InProgressTable() {
           {tableData && batches &&
             <Table
               tableHeaderColor="primary"
-              tableHead={["Nro de Lote", "Producto", "Produccion", "Trizado"]}
+              tableHead={["Nro de Lote", "Producto", "Produccion", "Estado", "Trizado", "Responsable"]}
+              defaultOrderBy={3}
+              defaultOrder={'desc'}
               tableData={tableData}
+              type={'batch'}
               ids={batches.batches.map(b => b.id)}
             />
           }

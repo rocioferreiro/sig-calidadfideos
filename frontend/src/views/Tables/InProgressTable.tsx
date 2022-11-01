@@ -62,9 +62,10 @@ export default function InProgressTable() {
     get('batches/state/PROCESANDO').then(res => {
       setBatches(res);
       setTableData(res.batches.map((b: Batch, key: number) =>
-        [`${b.batchNumber}`,
+        [`${b.id}`,
+          `${b.batchNumber}`,
           `${b.product.type} ${b.product.brand}`,
-          new Date(b.productionDate).toUTCString().substring(0,16),
+          b.productionDate,
           getSampleState({batch: b, changes: res.changes[key]}).visual,
           getSampleState({batch: b, changes: res.changes[key]}).coccion
         ]));
@@ -122,6 +123,9 @@ export default function InProgressTable() {
               <Table
                 tableHeaderColor="primary"
                 tableHead={["Nro de Lote", "Producto", "Produccion", "Estado de Control Visual", "Estado de Cocción"]}
+                defaultOrderBy={3}
+                defaultOrder={'asc'}
+                type={'batch'}
                 tableData={tableData}
                 ids={batches.batches.map(b => b.id)}
               />

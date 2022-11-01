@@ -47,27 +47,34 @@ type Batch = {
   product: {type: string, brand: string},
   productionDate: string,
   shatterLevel: number,
+  state: string,
   samples: {state: string, packingDate: string}[]
 }
 
 // @ts-ignore
 const useStyles = makeStyles(styles);
 
-export default function InProgressTable() {
+export default function PNCTable() {
   const classes = useStyles();
   const [batches, setBatches] = React.useState<{ batches: Batch[], changes: any[][] }>();
   const [tableData, setTableData] = React.useState<string[][]>();
 
   React.useEffect(() => {
-    get('batches/state/CONCESION').then(res => {
-      setBatches(res);
-      debugger;
-      setTableData(res.batches.map((b: Batch, key: number) =>
-        [`${b.batchNumber}`,
-          `${b.product.type} ${b.product.brand}`,
-          new Date(b.productionDate).toUTCString().substring(0,16),
-          `${b.shatterLevel}%`
-        ]));
+    get('batches/state/RECHAZO').then(res => {
+      get('batches/state/CONCESION').then(res2 => {
+        const batchesInfo = [...res.batches, ...res2.batches];
+        const changesInfo = res.changes[0] !== 0 ? [...res.changes, ...res2.changes] : res2.changes;
+        setBatches({batches: batchesInfo, changes: changesInfo});
+        setTableData(batchesInfo.map((b: Batch, key: number) =>
+          [`${b.id}`,
+            `${b.batchNumber}`,
+            `${b.product.type} ${b.product.brand}`,
+             b.productionDate,
+            `${b.state}`,
+            `${b.shatterLevel}%`,
+            `${changesInfo[key].filter((c: any) => c.type === 'coccion')[0].user.name}`
+          ]));
+      })
     })
   }, [])
 
@@ -75,17 +82,20 @@ export default function InProgressTable() {
     <GridContainer>
       <Card>
         <CardHeader color="primary">
-          <h4 className={classes.cardTitleWhite}>Lotes bajo Concesión</h4>
+          <h4 className={classes.cardTitleWhite}>Lotes PNC</h4>
           <p className={classes.cardCategoryWhite}>
-            En esta tabla se encuentran los lotes que fueron clasificados bajo concesión en el proceso de control de calidad.
+            En esta tabla se encuentran los lotes que fueron clasificados bajo la categoria de Producto No Conforme en el proceso de control de calidad.
           </p>
         </CardHeader>
         <CardBody>
           {tableData && batches &&
             <Table
               tableHeaderColor="primary"
-              tableHead={["Nro de Lote", "Producto", "Produccion", "Trizado"]}
+              tableHead={["Nro de Lote", "Producto", "Produccion", "Estado", "Trizado", "Responsable"]}
+              defaultOrderBy={3}
+              defaultOrder={'desc'}
               tableData={tableData}
+              type={'batch'}
               ids={batches.batches.map(b => b.id)}
             />
           }

@@ -13,7 +13,7 @@ import UserProfile from "./views/UserProfile/UserProfile";
 import TableList from "./views/TableList/TableList";
 import InProgressTable from "./views/Tables/InProgressTable";
 import HistoryTable from "./views/Tables/HistoryTable";
-import ConcessionTable from "./views/Tables/ConcessionTable";
+import ConcessionTable from "./views/Tables/PNCTable";
 import RejectedTable from "./views/Tables/RejectedTable";
 
 const dashboardRoutes = [
@@ -34,23 +34,23 @@ const dashboardRoutes = [
   },
   {
     path: "/history",
-    name: "Historial",
+    name: "Liberados",
     icon: "content_paste",
     component: HistoryTable,
     layout: "/admin",
   },
   {
-    path: "/concession",
-    name: "Bajo Concesión",
+    path: "/rejected",
+    name: "Rechazados",
     icon: "content_paste",
-    component: ConcessionTable,
+    component: RejectedTable,
     layout: "/admin",
   },
   {
-    path: "/regected",
+    path: "/pnc",
     name: "No Conformes",
     icon: "content_paste",
-    component: RejectedTable,
+    component: ConcessionTable,
     layout: "/admin",
   },
   {

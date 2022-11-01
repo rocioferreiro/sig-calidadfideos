@@ -2,7 +2,6 @@ import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
-import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import Table from "../../components/Table/Table.js";
 import Card from "../../components/Card/Card.js";
@@ -47,6 +46,7 @@ type Batch = {
   product: {type: string, brand: string},
   productionDate: string,
   shatterLevel: number,
+  state: string,
   samples: {state: string, packingDate: string}[]
 }
 
@@ -60,14 +60,20 @@ export default function InProgressTable() {
 
   React.useEffect(() => {
     get('batches/state/PARA LIBERAR').then(res => {
-      setBatches(res);
-      debugger;
-      setTableData(res.batches.map((b: Batch, key: number) =>
-        [`${b.batchNumber}`,
-          `${b.product.type} ${b.product.brand}`,
-          new Date(b.productionDate).toUTCString().substring(0,16),
-          `${b.shatterLevel}%`
-        ]));
+      get('batches/state/CONCESION').then(res2 => {
+        const batchesInfo = [...res.batches, ...res2.batches];
+        const changesInfo = res.changes[0] !== 0 ? [...res.changes, ...res2.changes] : res2.changes;
+        setBatches({batches: batchesInfo, changes: changesInfo});
+        setTableData(batchesInfo.map((b: Batch, key: number) =>
+          [`${b.id}`,
+            `${b.batchNumber}`,
+            `${b.product.type} ${b.product.brand}`,
+             b.productionDate,
+            `${b.state}`,
+            `${b.shatterLevel}%`,
+            `${changesInfo[key].filter((c: any) => c.type === 'coccion')[0].user.name}`
+          ]));
+      })
     })
   }, [])
 
@@ -77,14 +83,17 @@ export default function InProgressTable() {
         <CardHeader color="primary">
           <h4 className={classes.cardTitleWhite}>Lotes Finalizados para Liberación</h4>
           <p className={classes.cardCategoryWhite}>
-            En esta tabla se encuentran los lotes que fueron aprobados en el proceso de control de calidad.
+            En esta tabla se encuentran los lotes que fueron aprobados en el proceso de control de calidad y aquellos marcados como concesión.
           </p>
         </CardHeader>
         <CardBody>
           {tableData && batches &&
             <Table
               tableHeaderColor="primary"
-              tableHead={["Nro de Lote", "Producto", "Produccion", "Trizado"]}
+              tableHead={["Nro de Lote", "Producto", "Produccion", "Estado", "Trizado", "Responsable"]}
+              defaultOrderBy={3}
+              defaultOrder={'desc'}
+              type={'batch'}
               tableData={tableData}
               ids={batches.batches.map(b => b.id)}
             />

@@ -57,15 +57,23 @@ const useStyles = makeStyles(styles);
 
 export default function Details({id}) {
   const [batch, setBatch] = React.useState();
+  const [samples, setSamples] = React.useState([]);
+  const [currentSample, setCurrentSample] = React.useState('A');
   const classes = useStyles();
   const history = useHistory();
 
   React.useEffect(() => {
-    debugger
     get(`batches/${id}`).then(res => {
       setBatch(res)
+      setSamples(res.changes.filter(c => c.type === 'creation').map(c => c.date).sort((a, b)=> new Date(a)- new Date(b)))
     })
   }, [])
+
+  React.useEffect(() => {
+    if(samples.length > 0) {
+      setCurrentSample(letterByDate(batch.changes[0].date))
+    }
+  }, [samples])
 
   function getDateXDaysAgo(numOfDays, date = new Date()) {
     const daysAgo = new Date(date.getTime());
@@ -84,7 +92,6 @@ export default function Details({id}) {
   function getSampleState() {
     if(batch.changes[0] === 0) return {text: 'Agregar muestra', action: () => {history.push(`/batch/${batch.batch.id}/add`)}}
     const state = batch.batch.samples[0].state;
-    debugger;
     switch (state) {
       case 'cargado':
         if(getDateXDaysAgo(2).getTime() > new Date(batch.batch.productionDate)){
@@ -96,14 +103,13 @@ export default function Details({id}) {
       case 'visual':
         if(getDateXDaysAgo(7).getTime() > new Date(batch.batch.productionDate)){
           return {text: 'Listo para coccion', action: () => {
-            debugger
             history.push(`/batch/${batch.batch.id}/edit/${batch.batch.samples.filter(s => s.state === 'visual')[0].id}`)
           }};
         } else {
           const diff = getDifferenceBetweenDates(getDateXDaysAgo(7), new Date(batch.batch.productionDate))
           return {text:`${diff.amount} ${diff.unit} faltantes para cocción`, action: () => {}};
         }
-      case 'coccion', 'trizado':
+      case 'trizado':
         return {text:`Listo, trizado: ${batch.batch.shatterLevel}`, action: () => {}};
     }
   }
@@ -121,9 +127,10 @@ export default function Details({id}) {
               <p> SKU: {batch.batch.product.SKU} </p>
               <p> Producido: 2022/10/17 </p>
             </div>
-            {batch.batch.state === 'PROCESANDO'?
+            {batch.batch.samples.length > 0 && batch.batch.samples[0].state === 'visual'?
               <h6> {batch.batch.shatterLevel > 0 ? 'Trizado: Leve Trizado' : 'Trizado: OK'}</h6> :
-              <h6> Trizado actual: <strong>{' '} {batch.batch.shatterLevel}% </strong></h6>
+              batch.batch.samples.length > 0 && batch.batch.samples[0].state === 'coccion'?
+              <h6> Trizado actual: <strong>{' '} {batch.batch.shatterLevel}% </strong></h6> : <h6> </h6>
             }
           </CardBody>
         </Card>
@@ -142,7 +149,7 @@ export default function Details({id}) {
           <CardBody>
             <Container style={{backgroundColor: 'warning', display: 'flex', justifyContent: 'space-between', padding: 0}}>
               <div style={{display: 'flex'}}>
-                <h4 >{getSampleState().text === 'Agregar muestra' ? 'No hay Muestra' : 'Muestra'}  </h4>
+                <h4 >{getSampleState().text === 'Agregar muestra' ? 'No hay Muestra' : `Muestra ${currentSample}`}  </h4>
                 <div style={{display: (getSampleState().text === 'Agregar muestra' || batch.batch.samples[0].state === 'trizado') ? 'none': 'flex', alignItems: 'center', paddingLeft: 10}} onClick={() => {history.push(`/batch/${batch.batch.id}/add`)}}> <Edit/> </div>
               </div>
               <div style={styles.stateStyle} onClick={getSampleState().action}> {getSampleState().text} </div>
@@ -163,7 +170,9 @@ export default function Details({id}) {
             <Table
               tableHeaderColor="warning"
               tableHead={["Responsable", "Cambio", "Fecha"]}
-              tableData={batch.changes.map(c => [c.user.name, c.type === 'visual'? 'Control Visual': c.type === 'coccion' ? "Control Cocción" : "Nueva muestra", new Date(c.date).toUTCString().substring(0,16)])
+              defaultOrderBy={3}
+              defaultOrder={'desc'}
+              tableData={batch.changes.map(c => [`${c.id}`, c.user.name, c.type === 'visual'? `Control Visual de ${letterByDate(c.date)}`: c.type === 'coccion' ? `Control Cocción de ${letterByDate(c.date)}` : `Nueva muestra: ${letterByDate(c.date)}`, c.date])
               }
             /> :
               <p> No se realizó ningun cambio todavía! </p>
@@ -173,4 +182,16 @@ export default function Details({id}) {
       </GridItem>
     </GridContainer>
   ) : <></>
+
+  function letterByDate(d) {
+    let filtered = samples.filter(s => new Date(s).getTime() <= new Date(d).getTime())
+    const letterIndex = samples.indexOf(filtered[filtered.length-1]);
+    const A = 'A'.charCodeAt(0);
+    let numberToCharacter = number => {
+      return number <= 0 ? String.fromCharCode(A) : String.fromCharCode(A + number);
+    };
+    return numberToCharacter(letterIndex);
+  }
 }
+
+
