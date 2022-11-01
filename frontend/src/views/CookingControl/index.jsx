@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, MenuItem, Select } from '@material-ui/core';
+import {FormControl, MenuItem, Select, TextField} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -13,6 +13,7 @@ import CardHeader from '../../components/Card/CardHeader.js';
 import CardBody from '../../components/Card/CardBody.js';
 import CardFooter from '../../components/Card/CardFooter.js';
 import {get, post} from '../../services/http';
+import CustomInput from "../../components/CustomInput/CustomInput";
 
 
 const styles = {
@@ -48,23 +49,24 @@ const styles = {
 // @ts-ignore
 const useStyles = makeStyles(styles);
 
-export default function VisualControl(){
+export default function CookingControl(){
   const classes = useStyles();
   const params = useParams();
   const history = useHistory();
   const [batchNumber, setBatchNumber] = React.useState(0);
   const formik = useFormik({
     initialValues: {
-      shatterLevel: 0
+      shatterWeight: 0,
+      totalWeight: 0,
     },
     onSubmit: values => {
       get(`sample/${params.sampleId}`).then(res => {
-        post(`visual/${params.batchId}/${localStorage.getItem('id')}`, {
+        post(`cooking/${params.batchId}/${localStorage.getItem('id')}`, {
           sample: {
             packingDate: res.sample.packingDate,
-            state: 'visual'
+            state: 'trizado'
           },
-          shatterLevel: values.shatterLevel
+          shatterLevel: (values.shatterWeight / values.totalWeight) * 100
 
         }, {
           headers: {
@@ -92,32 +94,38 @@ export default function VisualControl(){
   return <Layout>
     <Card>
       <CardHeader color="primary">
-        <h4 className={classes.cardTitleWhite}>Control Visual para el Lote n° {batchNumber}</h4>
-        <p className={classes.cardCategoryWhite}>Se encontro trizado en la muestra durante el control visual?</p>
+        <h4 className={classes.cardTitleWhite}>Control por Coccion para el Lote n° {batchNumber}</h4>
+        <p className={classes.cardCategoryWhite}>Cargar peso de la porcion de fideos trizados y peso total de la muestra cocida.</p>
       </CardHeader>
       <CardBody>
         <GridContainer>
-          <GridItem xs={12} sm={12} md={12}>
-            <FormControl
-              className={classes.formControl}
-              fullWidth={true}
-            >
-              <Select
-                value={formik.values.shatterLevel}
-                onChange={formik.handleChange}
-                inputProps={{
-                  name: 'shatterLevel',
-                  id: 'shatterLevel',
-                }}
-              >
-                <MenuItem value={0}>
-                  OK
-                </MenuItem>
-                <MenuItem value={1}>
-                  LEVE TRIZADO
-                </MenuItem>
-              </Select>
-            </FormControl>
+          <GridItem xs={12} sm={12} md={6}>
+            <CustomInput
+              labelText="Peso de la porcion de fideos trizados"
+              id="shatterWeight"
+              formControlProps={{
+                fullWidth: true,
+              }}
+              inputProps={{
+                value: formik.values.shatterWeight,
+                onChange: formik.handleChange,
+                type: 'number'
+              }}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={6}>
+            <CustomInput
+              labelText="Peso total de la porcion cocida"
+              id="totalWeight"
+              formControlProps={{
+                fullWidth: true,
+              }}
+              inputProps={{
+                value: formik.values.totalWeight,
+                onChange: formik.handleChange,
+                type: 'number'
+              }}
+            />
           </GridItem>
         </GridContainer>
       </CardBody>

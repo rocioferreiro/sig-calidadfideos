@@ -60,7 +60,7 @@ export default function InProgressTable() {
   const [tableData, setTableData] = React.useState<string[][]>();
 
   React.useEffect(() => {
-    get('batches/state/RECHAZO').then(res => {
+    get('batches/state/RECHAZADO').then(res => {
       setBatches(res);
       debugger;
       setTableData(res.batches.map((b: Batch, key: number) =>

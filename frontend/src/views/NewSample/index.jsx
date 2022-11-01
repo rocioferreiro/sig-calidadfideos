@@ -12,7 +12,7 @@ import Card from '../../components/Card/Card.js';
 import CardHeader from '../../components/Card/CardHeader.js';
 import CardBody from '../../components/Card/CardBody.js';
 import CardFooter from '../../components/Card/CardFooter.js';
-import { post } from '../../services/http';
+import {get, post} from '../../services/http';
 
 
 const styles = {
@@ -52,6 +52,7 @@ export default function NewSample(){
   const classes = useStyles();
   const params = useParams();
   const history = useHistory();
+  const [batchNumber, setBatchNumber] = React.useState(0);
   const formik = useFormik({
     initialValues: {
       packingDate: new Date()
@@ -73,10 +74,16 @@ export default function NewSample(){
     },
   });
 
+  React.useEffect(() => {
+    get(`batches/${params.id}`).then(res => {
+      setBatchNumber(res.batch.batchNumber)
+    })
+  }, [])
+
   return <Layout>
     <Card>
       <CardHeader color="primary">
-        <h4 className={classes.cardTitleWhite}>Nueva Muestra</h4>
+        <h4 className={classes.cardTitleWhite}>Nueva Muestra para el Lote n° {batchNumber}</h4>
         <p className={classes.cardCategoryWhite}>Complete fecha de envasado del paquete</p>
       </CardHeader>
       <CardBody>

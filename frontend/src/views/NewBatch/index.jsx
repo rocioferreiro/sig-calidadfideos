@@ -76,6 +76,7 @@ export default function NewBatch(){
         }).then(() => {
           history.push('/admin/inprogress')
         }).catch(e => {
+          debugger;
           alert(e);
         })
       }

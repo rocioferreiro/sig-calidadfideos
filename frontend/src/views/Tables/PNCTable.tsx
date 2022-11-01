@@ -60,7 +60,7 @@ export default function PNCTable() {
   const [tableData, setTableData] = React.useState<string[][]>();
 
   React.useEffect(() => {
-    get('batches/state/RECHAZO').then(res => {
+    get('batches/state/RECHAZADO').then(res => {
       get('batches/state/CONCESION').then(res2 => {
         const batchesInfo = [...res.batches, ...res2.batches];
         const changesInfo = res.changes[0] !== 0 ? [...res.changes, ...res2.changes] : res2.changes;

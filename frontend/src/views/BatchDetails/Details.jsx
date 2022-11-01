@@ -103,7 +103,7 @@ export default function Details({id}) {
       case 'visual':
         if(getDateXDaysAgo(7).getTime() > new Date(batch.batch.productionDate)){
           return {text: 'Listo para coccion', action: () => {
-            history.push(`/batch/${batch.batch.id}/edit/${batch.batch.samples.filter(s => s.state === 'visual')[0].id}`)
+            history.push(`/coccion/${batch.batch.id}/${batch.batch.samples[0].id}`)
           }};
         } else {
           const diff = getDifferenceBetweenDates(getDateXDaysAgo(7), new Date(batch.batch.productionDate))
