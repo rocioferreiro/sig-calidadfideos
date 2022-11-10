@@ -66,8 +66,8 @@ export default function InProgressTable() {
           `${b.batchNumber}`,
           `${b.product.type} ${b.product.brand}`,
           b.productionDate,
-          getSampleState({batch: b, changes: res.changes[key]}).visual,
-          getSampleState({batch: b, changes: res.changes[key]}).coccion
+          getSampleState({batch: b, changes: res.changes.filter(c => c.id === b.id)[0].changes.filter(c => c)}).visual,
+          getSampleState({batch: b, changes: res.changes.filter(c => c.id === b.id)[0].changes.filter(c => c)}).coccion
         ]));
     })
   }, [])
@@ -88,7 +88,8 @@ export default function InProgressTable() {
 
   function getSampleState(batch: { batch: Batch, changes: any[] }) {
     if(batch.changes[0] === 0) return {visual: 'Falta agregar muestra', coccion: 'Falta control visual para desbloquear'}
-    const state = batch.changes.filter(s => s.type === 'coccion').length > 0? 'coccion' : batch.changes.filter(s => s.type === 'visual').length > 0? 'visual': 'cargado';
+    const notNullChanges = batch.changes.filter(c=>c);
+    const state = notNullChanges.filter(s => s.type === 'coccion').length > 0? 'coccion' : notNullChanges.filter(s => s.type === 'visual').length > 0? 'visual': 'cargado';
     switch (state) {
       case 'cargado':
         if(getDateXDaysAgo(2).getTime() > new Date(batch.batch.samples[0].packingDate).getTime()){

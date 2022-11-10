@@ -19,8 +19,8 @@ const request = (url, method, body, config) => {
 
             // if an error occurs on the server return the errorMessage in case we intentionally threw that error, or a generic one in case an unexpected exception rises.
             return response.json().then(error => {
-                if (error.hasOwnProperty('message')) {
-                    throw (error.message)
+                if (error.hasOwnProperty('error')) {
+                    throw (error.error)
                 } else throw new Error("¡Error inesperado del servidor!")
             })
         })

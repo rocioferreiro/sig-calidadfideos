@@ -62,16 +62,16 @@ export default function InProgressTable() {
   React.useEffect(() => {
     get('batches/state/RECHAZADO').then(res => {
       setBatches(res);
-      debugger;
-      setTableData(res.batches.map((b: Batch, key: number) =>
-        [`${b.id}`,
+      setTableData(res.batches.map((b: Batch, key: number) => {
+        const changesWithoutNull = res.changes.filter(c => c.id === b.id)[0].changes.filter(obj=>obj);
+        return [`${b.id}`,
           `${b.batchNumber}`,
           `${b.product.type} ${b.product.brand}`,
           `${b.state}`,
            b.productionDate,
           `${b.shatterLevel}%`,
-          `${res.changes[key].filter((c: any) => c.type === 'coccion')[0].user.name}`
-        ]));
+          `${changesWithoutNull.filter((c: any) => c.type === 'coccion')[0].user.name}`
+        ]}));
     })
   }, [])
 

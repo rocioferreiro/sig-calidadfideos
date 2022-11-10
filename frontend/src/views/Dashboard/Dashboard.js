@@ -36,7 +36,8 @@ import Chartist from "chartist";
 
 const useStyles = makeStyles(styles);
 
-const efficiencyExamples = [92, 90, 87, 70, 78, 89, 97, 91, 71, 85, 89];
+const efficiencyExamples = [92, 90, 87, 85, 82, 89, 97, 91, 87, 85, 89];
+const pncVisualExamples = [82, 90, 77, 75, 82, 79, 77, 81, 87, 85, 89];
 const pncExamples = [6, 4, 10, 2, 3, 8, 9, 11, 16, 17, 15];
 const rejectedExamples = [3, 3, 5, 0, 1, 4, 5, 7, 10, 11, 10];
 const concessionExamples = [3, 2, 5, 10, 0, 7, 11, 8, 5, 1, 3];
@@ -47,6 +48,7 @@ export default function Dashboard() {
   const [headerValues, setHeaderValues] = React.useState();
   const [efficiencyChartInfo, setEfficiencyChartInfo] = React.useState(dailySalesChart);
   const [pncChartInfo, setPncChartInfo] = React.useState(emailsSubscriptionChart);
+  const [pncVisualChartInfo, setPncVisualChartInfo] = React.useState(emailsSubscriptionChart);
   const [rejectedChartInfo, setRejectedChartInfo] = React.useState(completedTasksChart);
   const [concessionChartInfo, setConcessionChartInfo] = React.useState(dailySalesChart);
 
@@ -302,6 +304,60 @@ export default function Dashboard() {
       }
       setPncChartInfo(info);
     })
+    get('pncByVisualMonthly').then(res => {
+      let series = [12];
+      for (let i=11; i>=0; i--) {
+        series[i] = res.pncByMonth.filter(j => j.month === labels[i].num).length < 1 ? pncVisualExamples[i] : parseInt(res.pncByMonth.filter(j => j.month === labels[i].num)[0].value);
+      }
+      const info = {
+        data: {
+          labels: labels.map(l => l.name),
+          series: [series],
+        },
+        options: {
+          axisX: {
+            showGrid: false,
+          },
+          low: 60,
+          high: 100,
+          chartPadding: {
+            top: 0,
+            right: 5,
+            bottom: 0,
+            left: 0,
+          },
+        },
+        responsiveOptions: [
+          [
+            "screen and (max-width: 640px)",
+            {
+              seriesBarDistance: 5,
+              axisX: {
+                labelInterpolationFnc: function (value) {
+                  return value[0];
+                },
+              },
+            },
+          ],
+        ],
+        animation: {
+          draw: function (data) {
+            if (data.type === "bar") {
+              data.element.animate({
+                opacity: {
+                  begin: (data.index + 1) * delays2,
+                  dur: durations2,
+                  from: 0,
+                  to: 1,
+                  easing: "ease",
+                },
+              });
+            }
+          },
+        },
+      }
+      setPncVisualChartInfo(info);
+    })
   }, [])
 
   return (
@@ -429,7 +485,7 @@ export default function Dashboard() {
               />
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Eficiencia de analisis</h4>
+              <h4 className={classes.cardTitle}>Eficiencia de analisis (%)</h4>
               <p className={classes.cardCategory}>
                 Totales mensuales de eficiencia del ultimo año
               </p>
@@ -449,7 +505,7 @@ export default function Dashboard() {
               />
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Producto No Conforme</h4>
+              <h4 className={classes.cardTitle}>Producto No Conforme (%)</h4>
               <p className={classes.cardCategory}>Porcentaje no conforme de analizados por mes</p>
             </CardBody>
           </Card>
@@ -466,7 +522,7 @@ export default function Dashboard() {
               />
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Lotes Rechazados</h4>
+              <h4 className={classes.cardTitle}>Lotes Rechazados (%)</h4>
               <p className={classes.cardCategory}>Porcentaje rechazados de analizados por mes</p>
             </CardBody>
           </Card>
@@ -486,7 +542,7 @@ export default function Dashboard() {
               />
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Concesion de Liberados</h4>
+              <h4 className={classes.cardTitle}>Concesion de Liberados (%)</h4>
               <p className={classes.cardCategory}>
                 Porcentaje de concesion de los liberados por mes
               </p>
@@ -498,16 +554,16 @@ export default function Dashboard() {
             <CardHeader color="danger">
               <ChartistGraph
                 className="ct-chart"
-                data={emailsSubscriptionChart.data}
+                data={pncVisualChartInfo.data}
                 type="Bar"
-                options={emailsSubscriptionChart.options}
-                responsiveOptions={emailsSubscriptionChart.responsiveOptions}
-                listener={emailsSubscriptionChart.animation}
+                options={pncVisualChartInfo.options}
+                responsiveOptions={pncVisualChartInfo.responsiveOptions}
+                listener={pncVisualChartInfo.animation}
               />
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
+              <h4 className={classes.cardTitle}>No Conformes por control visual (%)</h4>
+              <p className={classes.cardCategory}>Porcentaje de PNC que obtuvo trizado en el control visual</p>
             </CardBody>
           </Card>
         </GridItem>

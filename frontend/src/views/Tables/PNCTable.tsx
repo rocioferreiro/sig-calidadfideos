@@ -72,7 +72,7 @@ export default function PNCTable() {
              b.productionDate,
             `${b.state}`,
             `${b.shatterLevel}%`,
-            `${changesInfo[key].filter((c: any) => c.type === 'coccion')[0].user.name}`
+            `${changesInfo.filter(c => c.id === b.id)[0].changes.filter((c: any) => c.type === 'coccion')[0].user.name}`
           ]));
       })
     })

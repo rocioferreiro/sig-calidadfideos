@@ -62,7 +62,7 @@ export default function InProgressTable() {
     get('batches/state/PARA LIBERAR').then(res => {
       get('batches/state/CONCESION').then(res2 => {
         const batchesInfo = [...res.batches, ...res2.batches];
-        const changesInfo = res.changes[0] !== 0 ? [...res.changes, ...res2.changes] : res2.changes;
+        const changesInfo = res.changes[0].changes !== 0 ? [...res.changes, ...res2.changes] : res2.changes;
         setBatches({batches: batchesInfo, changes: changesInfo});
         setTableData(batchesInfo.map((b: Batch, key: number) =>
           [`${b.id}`,
@@ -71,7 +71,7 @@ export default function InProgressTable() {
              b.productionDate,
             `${b.state}`,
             `${b.shatterLevel}%`,
-            `${changesInfo[key].filter((c: any) => c.type === 'coccion')[0].user.name}`
+            `${changesInfo.filter(c => c.id === b.id)[0].changes.filter(c => c).filter((c: any) => c.type === 'coccion')[0].user.name}`
           ]));
       })
     })

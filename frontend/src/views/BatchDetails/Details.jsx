@@ -65,7 +65,7 @@ export default function Details({id}) {
   React.useEffect(() => {
     get(`batches/${id}`).then(res => {
       setBatch(res)
-      setSamples(res.changes.filter(c => c.type === 'creation').map(c => c.date).sort((a, b)=> new Date(a)- new Date(b)))
+      setSamples(res.changes.filter(c=>c).filter(c => c.type === 'creation').map(c => c.date).sort((a, b)=> new Date(a)- new Date(b)))
     })
   }, [])
 
@@ -91,7 +91,8 @@ export default function Details({id}) {
 
   function getSampleState() {
     if(batch.changes[0] === 0) return {text: 'Agregar muestra', action: () => {history.push(`/batch/${batch.batch.id}/add`)}}
-    const state = batch.batch.samples[0].state;
+    const notNullChanges = batch.changes.filter(c=>c);
+    const state = notNullChanges.filter(s => s.type === 'coccion').length > 0? 'coccion' : notNullChanges.filter(s => s.type === 'visual').length > 0? 'visual': 'cargado';
     switch (state) {
       case 'cargado':
         if(getDateXDaysAgo(2).getTime() > new Date(batch.batch.productionDate)){
@@ -109,7 +110,7 @@ export default function Details({id}) {
           const diff = getDifferenceBetweenDates(getDateXDaysAgo(7), new Date(batch.batch.productionDate))
           return {text:`${diff.amount} ${diff.unit} faltantes para cocción`, action: () => {}};
         }
-      case 'trizado':
+      case 'coccion':
         return {text:`Listo, trizado: ${batch.batch.shatterLevel}`, action: () => {}};
     }
   }
@@ -125,7 +126,7 @@ export default function Details({id}) {
             <div>
               <h4> {batch.batch.product.type} {batch.batch.product.brand} </h4>
               <p> SKU: {batch.batch.product.SKU} </p>
-              <p> Producido: 2022/10/17 </p>
+              <p> Producido: {new Date(batch.batch.productionDate).toUTCString().substring(0,16)} </p>
             </div>
             {batch.batch.samples.length > 0 && batch.batch.samples[0].state === 'visual'?
               <h6> {batch.batch.shatterLevel > 0 ? 'Trizado: Leve Trizado' : 'Trizado: OK'}</h6> :
@@ -172,7 +173,7 @@ export default function Details({id}) {
               tableHead={["Responsable", "Cambio", "Fecha"]}
               defaultOrderBy={3}
               defaultOrder={'desc'}
-              tableData={batch.changes.map(c => [`${c.id}`, c.user.name, c.type === 'visual'? `Control Visual de ${letterByDate(c.date)}`: c.type === 'coccion' ? `Control Cocción de ${letterByDate(c.date)}` : `Nueva muestra: ${letterByDate(c.date)}`, c.date])
+              tableData={batch.changes.filter(c=>c).map(c => [`${c.id}`, c.user.name, c.type === 'visual'? `Control Visual de ${letterByDate(c.date)}`: c.type === 'coccion' ? `Control Cocción de ${letterByDate(c.date)}` : `Nueva muestra: ${letterByDate(c.date)}`, c.date])
               }
             /> :
               <p> No se realizó ningun cambio todavía! </p>
