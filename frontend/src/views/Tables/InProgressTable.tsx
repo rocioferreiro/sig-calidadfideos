@@ -87,7 +87,7 @@ export default function InProgressTable() {
   }
 
   function getSampleState(batch: { batch: Batch, changes: any[] }) {
-    if(batch.changes[0] === 0) return {visual: 'Falta agregar muestra', coccion: 'Falta control visual para desbloquear'}
+    if(batch.changes[0] === 0 || batch.changes.length < 1) return {visual: 'Falta agregar muestra', coccion: 'Falta control visual para desbloquear'}
     const notNullChanges = batch.changes.filter(c=>c);
     const state = notNullChanges.filter(s => s.type === 'coccion').length > 0? 'coccion' : notNullChanges.filter(s => s.type === 'visual').length > 0? 'visual': 'cargado';
     switch (state) {
