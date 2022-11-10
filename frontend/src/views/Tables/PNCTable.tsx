@@ -84,7 +84,7 @@ export default function PNCTable() {
         <CardHeader color="primary">
           <h4 className={classes.cardTitleWhite}>Lotes PNC</h4>
           <p className={classes.cardCategoryWhite}>
-            En esta tabla se encuentran los lotes que fueron clasificados bajo la categoria de Producto No Conforme en el proceso de control de calidad.
+            En esta tabla se encuentran los lotes que fueron clasificados bajo la categoria de Producto No Conforme en el proceso de control de calidad. (Trizado mayor igual a 15%)
           </p>
         </CardHeader>
         <CardBody>

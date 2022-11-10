@@ -83,7 +83,7 @@ export default function InProgressTable() {
         <CardHeader color="primary">
           <h4 className={classes.cardTitleWhite}>Lotes Finalizados para Liberación</h4>
           <p className={classes.cardCategoryWhite}>
-            En esta tabla se encuentran los lotes que fueron aprobados en el proceso de control de calidad y aquellos marcados como concesión.
+            En esta tabla se encuentran los lotes que fueron aprobados en el proceso de control de calidad y aquellos marcados como concesión. (Trizado menor a 25%)
           </p>
         </CardHeader>
         <CardBody>

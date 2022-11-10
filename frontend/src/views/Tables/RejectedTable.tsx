@@ -67,8 +67,8 @@ export default function InProgressTable() {
         return [`${b.id}`,
           `${b.batchNumber}`,
           `${b.product.type} ${b.product.brand}`,
+          b.productionDate,
           `${b.state}`,
-           b.productionDate,
           `${b.shatterLevel}%`,
           `${changesWithoutNull.filter((c: any) => c.type === 'coccion')[0].user.name}`
         ]}));
@@ -81,7 +81,7 @@ export default function InProgressTable() {
         <CardHeader color="primary">
           <h4 className={classes.cardTitleWhite}>Lotes Rechazados por el Sistema</h4>
           <p className={classes.cardCategoryWhite}>
-            En esta tabla se encuentran los lotes que fueron rechazados en el proceso de control de calidad.
+            En esta tabla se encuentran los lotes que fueron rechazados en el proceso de control de calidad. (Trizado mayor igual a 25%)
           </p>
         </CardHeader>
         <CardBody>
