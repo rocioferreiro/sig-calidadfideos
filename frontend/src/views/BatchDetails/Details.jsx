@@ -71,7 +71,10 @@ export default function Details({id}) {
 
   React.useEffect(() => {
     if(samples.length > 0) {
-      setCurrentSample(letterByDate(batch.changes[0].date))
+      const date = new Date(Math.max.apply(null, samples.map(function(e) {
+        return new Date(e);
+      })))
+      setCurrentSample(letterByDate(date))
     }
   }, [samples])
 
