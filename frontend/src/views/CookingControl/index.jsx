@@ -66,7 +66,7 @@ export default function CookingControl(){
             packingDate: res.sample.packingDate,
             state: 'trizado'
           },
-          shatterLevel: (values.shatterWeight / values.totalWeight) * 100
+          shatterLevel: parseInt((values.shatterWeight / values.totalWeight) * 100)
 
         }, {
           headers: {
