@@ -37,10 +37,10 @@ import Chartist from "chartist";
 const useStyles = makeStyles(styles);
 
 const efficiencyExamples = [92, 90, 87, 85, 82, 89, 97, 91, 87, 85, 89];
-const pncVisualExamples = [82, 90, 77, 75, 82, 79, 77, 81, 87, 85, 89];
-const pncExamples = [6, 4, 10, 2, 3, 8, 9, 11, 16, 17, 15];
-const rejectedExamples = [3, 3, 5, 0, 1, 4, 5, 7, 10, 11, 10];
-const concessionExamples = [3, 2, 5, 10, 0, 7, 11, 8, 5, 1, 3];
+const pncVisualExamples = [90, 91, 92, 93, 89, 87, 90, 89, 87, 91, 89];
+const pncExamples = [19, 17, 20, 21, 18, 17, 19, 23, 16, 20, 19];
+const rejectedExamples = [7, 6, 5, 7, 8, 9, 10, 8, 7, 6, 7];
+const concessionExamples = [11, 10, 9, 10, 12, 13, 11, 11, 12, 14, 10];
 
 export default function Dashboard() {
   const classes = useStyles();
@@ -154,7 +154,7 @@ export default function Dashboard() {
             tension: 0,
           }),
           low: 0,
-          high: 50,
+          high: 30,
           chartPadding: {
             top: 0,
             right: 0,
@@ -211,7 +211,7 @@ export default function Dashboard() {
             tension: 0,
           }),
           low: 0,
-          high: 50,
+          high: 30,
           chartPadding: {
             top: 0,
             right: 0,
@@ -265,7 +265,7 @@ export default function Dashboard() {
             showGrid: false,
           },
           low: 0,
-          high: 50,
+          high: 40,
           chartPadding: {
             top: 0,
             right: 5,
@@ -318,7 +318,7 @@ export default function Dashboard() {
           axisX: {
             showGrid: false,
           },
-          low: 60,
+          low: 70,
           high: 100,
           chartPadding: {
             top: 0,
