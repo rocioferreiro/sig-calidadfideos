@@ -59,7 +59,7 @@ export default function SignIn() {
         localStorage.setItem('date', res.user.updatedAt);
         history.push('/admin')
       }
-    )
+    ).catch(e => alert('El email o la contraseña son incorrectas'))
   }
 
   const changeState = (newState: any) => {
