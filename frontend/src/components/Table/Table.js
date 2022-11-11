@@ -68,7 +68,7 @@ export default function CustomTable(props) {
                   if(Date.parse(prop) && new Date(prop).getFullYear() >= 2022){
                     return (
                       <TableCell className={classes.tableCell} key={key}>
-                        {new Date(prop).toUTCString().substring(0,16)}
+                        {new Date(prop).toUTCString().substring(0,22)}
                       </TableCell>
                     );
                   }

@@ -173,10 +173,14 @@ export default function Details({id}) {
             {batch.changes[0] !== 0 ?
             <Table
               tableHeaderColor="warning"
-              tableHead={["Responsable", "Cambio", "Fecha"]}
-              defaultOrderBy={3}
+              tableHead={["Responsable", "Cambio", "Fecha de Empaquetado", "Fecha de Cambio"]}
+              defaultOrderBy={4}
               defaultOrder={'desc'}
-              tableData={batch.changes.filter(c=>c).map(c => [`${c.id}`, c.user.name, c.type === 'visual'? `Control Visual de ${letterByDate(c.date)}`: c.type === 'coccion' ? `Control Cocción de ${letterByDate(c.date)}` : `Nueva muestra: ${letterByDate(c.date)}`, c.date])
+              tableData={batch.changes.filter(c=>c).map(c => [
+                `${c.id}`,
+                c.user.name, c.type === 'visual'? `Control Visual de ${letterByDate(c.date)}`: c.type === 'coccion' ? `Control Cocción de ${letterByDate(c.date)}` : `Nueva muestra: ${letterByDate(c.date)}`,
+                c.newSample.packingDate,
+                c.date])
               }
             /> :
               <p> No se realizó ningun cambio todavía! </p>
